@@ -1,6 +1,6 @@
 package aufgabe1
 
-import java.util.ArrayList;
+import java.nio.charset.Charset
 
 /*For Parsing .gka-Files, to get Vertices and Edges.
  *Written by Sebastian Diedrich
@@ -40,7 +40,11 @@ class GroovyParser {
 			def graphPart = ~/ *([A-Za-z0-9_äüö]+) *(--|->) *([A-Za-z0-9_äüö]+) *([A-Za-z0-9_äüö]+)* *:* *(\d+)* *;$/
 
 			//parsing File with FileReader
-			FileReader reader = new FileReader(path).eachWithIndex(){line, index ->
+            InputStreamReader reader = new InputStreamReader(new FileInputStream(path), Charset.forName("ISO-8859-1"));
+			reader.eachWithIndex(){line, index ->
+                if(line.length() == 0) {
+                    return;
+                }
 				//define matcher-Object ; if line=graphPart then a matcher-Object is created
 				def matcher = line =~ graphPart
 					//four match-parts found
