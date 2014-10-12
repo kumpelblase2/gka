@@ -39,10 +39,10 @@ class GroovyParser {
 			//CAVE: *-blanks are possible between the match-parts!!!
 			def graphPart = ~/ *([A-Za-z0-9_äüö]+) *((--|->) *([A-Za-z0-9_äüö]+) *([A-Za-z0-9_äüö]+)* *:* *(\d+)*)? *;$/
 
-			//parsing File with FileReader
+			//parsing File with InputStreamReader to be able to use a different charset in order to parse umlauts.
             InputStreamReader reader = new InputStreamReader(new FileInputStream(path), Charset.forName("ISO-8859-1"));
 			reader.eachWithIndex(){line, index ->
-                if(line.length() == 0) {
+                if(line.length() == 0) { // Simply ignore lines which are empty.
                     return;
                 }
 				//define matcher-Object ; if line=graphPart then a matcher-Object is created
