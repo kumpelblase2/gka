@@ -37,7 +37,7 @@ class GroovyParser {
 			//each "(...)" contains later a part of the match; $=end of Pattern
 			//word=w=[A-Za-z0-9_] ; digits=d=[0-9] ; whitespaceCharacter=s=[ \t\r\n\v\f]
 			//CAVE: *-blanks are possible between the match-parts!!!
-			def graphPart = ~/ *([A-Za-z0-9_äüö]+) *(--|->) *([A-Za-z0-9_äüö]+) *([A-Za-z0-9_äüö]+)* *:* *(\d+)* *;$/
+			def graphPart = ~/ *([A-Za-z0-9_äüö]+) *((--|->) *([A-Za-z0-9_äüö]+) *([A-Za-z0-9_äüö]+)* *:* *(\d+)*)? *;$/
 
 			//parsing File with FileReader
             InputStreamReader reader = new InputStreamReader(new FileInputStream(path), Charset.forName("ISO-8859-1"));
@@ -50,7 +50,7 @@ class GroovyParser {
 					//four match-parts found
 					if(matcher.size() == 1){
 						//combine variables with the match
-						def (ganzeZeile, vertexStart, edgeType, vertexEnd, edgeName, edgeWeihgt) = matcher[0]
+						def (ganzeZeile, vertexStart, edgeDef, edgeType, vertexEnd, edgeName, edgeWeihgt) = matcher[0]
 							 println "Das ist der Startknoten: ${vertexStart}"
 							 println "Das ist der Kantentyp: ${edgeType}"
 							 println "Das ist der Endknoten: ${vertexEnd}"
