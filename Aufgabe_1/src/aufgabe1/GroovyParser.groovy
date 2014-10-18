@@ -1,7 +1,6 @@
 package aufgabe1
 
 import java.nio.charset.Charset
-
 /*For Parsing .gka-Files, to get Vertices and Edges.
  *Written by Sebastian Diedrich
  *Date: 2014-10-10
@@ -40,6 +39,7 @@ class GroovyParser {
 			def graphPart = ~/ *([A-Za-z0-9_äüö]+) *((--|->) *([A-Za-z0-9_äüö]+) *([A-Za-z0-9_äüö]+)* *:* *(\d+)*)? *;$/
 
 			//parsing File with InputStreamReader to be able to use a different charset in order to parse umlauts.
+            List<GraphPart> parts = new ArrayList<>();
             InputStreamReader reader = new InputStreamReader(new FileInputStream(path), Charset.forName("ISO-8859-1"));
 			reader.eachWithIndex(){line, index ->
                 if(line.length() == 0) { // Simply ignore lines which are empty.
@@ -56,6 +56,19 @@ class GroovyParser {
 							 println "Das ist der Endknoten: ${vertexEnd}"
 							 println "Das ist das Kantenname: ${edgeName}"
 							 println "Das ist das Kantengewicht: ${edgeWeihgt}"
+
+                             WeightedNamedEdge edge = null;
+                             if(vertexEnd != null) {
+                                 edge = new WeightedNamedEdge(vertexStart, vertexEnd, edgeType.equals("->"))
+                                 if (edgeWeihgt != null) {
+                                     edge.setWeigth(Integer.parseInt(edgeWeihgt))
+                                 }
+
+                                 if (edgeName != null) {
+                                     edge.setName(edgeName)
+                                 }
+                             }
+                             parts.add(new GraphPart(vertexStart, edge));
 							 count++
 							 println ""
 					}
@@ -66,6 +79,7 @@ class GroovyParser {
 					}
 		}
 		println "Eingelesene Zeilen: ${count}"
+        println "Graph: ${graph}"
 		println "Keine Übereinstimmung in ${noMatchFound}"
 	}
 	
