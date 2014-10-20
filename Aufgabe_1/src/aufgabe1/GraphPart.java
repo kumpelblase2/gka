@@ -20,4 +20,9 @@ public class GraphPart
 	{
 		return m_edge;
 	}
+	
+	public String toString()
+	{
+		return getVertex() + m_edge.toString();
+	}
 }

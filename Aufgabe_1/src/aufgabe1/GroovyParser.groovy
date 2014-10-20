@@ -1,6 +1,11 @@
 package aufgabe1
 
 import java.nio.charset.Charset
+
+import org.jgraph.graph.DefaultEdge;
+import org.jgrapht.Graph
+import org.jgrapht.graph.DefaultDirectedWeightedGraph;
+
 /*For Parsing .gka-Files, to get Vertices and Edges.
  *Written by Sebastian Diedrich
  *Date: 2014-10-10
@@ -18,6 +23,8 @@ class GroovyParser {
 	String path = "";
 	int count = 0;
 	ArrayList noMatchFound = new ArrayList();
+	List<GraphPart> parts = new ArrayList<>();
+	Graph<String, WeightedNamedEdge> graphT = new DefaultDirectedWeightedGraph<>(WeightedNamedEdge);
 	
 	//Method for setting the path of the file
 	public void setPath(String pathOfFile){
@@ -39,7 +46,7 @@ class GroovyParser {
 			def graphPart = ~/ *([A-Za-z0-9_äüö]+) *((--|->) *([A-Za-z0-9_äüö]+) *([A-Za-z0-9_äüö]+)* *:* *(\d+)*)? *;$/
 
 			//parsing File with InputStreamReader to be able to use a different charset in order to parse umlauts.
-            List<GraphPart> parts = new ArrayList<>();
+            //List<GraphPart> parts = new ArrayList<>();
             InputStreamReader reader = new InputStreamReader(new FileInputStream(path), Charset.forName("ISO-8859-1"));
 			reader.eachWithIndex(){line, index ->
                 if(line.length() == 0) { // Simply ignore lines which are empty.
@@ -51,26 +58,36 @@ class GroovyParser {
 					if(matcher.size() == 1){
 						//combine variables with the match
 						def (ganzeZeile, vertexStart, edgeDef, edgeType, vertexEnd, edgeName, edgeWeihgt) = matcher[0]
+						/*
 							 println "Das ist der Startknoten: ${vertexStart}"
 							 println "Das ist der Kantentyp: ${edgeType}"
 							 println "Das ist der Endknoten: ${vertexEnd}"
 							 println "Das ist das Kantenname: ${edgeName}"
 							 println "Das ist das Kantengewicht: ${edgeWeihgt}"
-
-                             WeightedNamedEdge edge = null;
+						*/
+						WeightedNamedEdge edge = null;
+						//add Vertex to the graphT
+						graphT.addVertex(vertexStart)
+						     //if there is an edge between two vertices
                              if(vertexEnd != null) {
-                                 edge = new WeightedNamedEdge(vertexStart, vertexEnd, edgeType.equals("->"))
+                                 edge = new WeightedNamedEdge(vertexStart, vertexEnd, edgeType.equals("->"));
+								 graphT.addVertex(vertexEnd)
+								 
+								 //ggf Gewichtung hinzufuegen
                                  if (edgeWeihgt != null) {
                                      edge.setWeigth(Integer.parseInt(edgeWeihgt))
                                  }
-
+								 //ggf Namen hinzufuegen
                                  if (edgeName != null) {
-                                     edge.setName(edgeName)
+                                     edge.setName(edgeName)                                   
                                  }
+								 graphT.addEdge(vertexStart, vertexEnd, edge)
+                                 
                              }
-                             parts.add(new GraphPart(vertexStart, edge));
+                             parts.add(new GraphPart(vertexStart, edge))
 							 count++
 							 println ""
+						
 					}
 					else{
 						int realIndex = index+1
@@ -79,8 +96,8 @@ class GroovyParser {
 					}
 		}
 		println "Eingelesene Zeilen: ${count}"
-        println "Graph: ${graph}"
 		println "Keine Übereinstimmung in ${noMatchFound}"
+		println graphT
 	}
 	
 }

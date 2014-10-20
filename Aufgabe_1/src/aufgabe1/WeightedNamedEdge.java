@@ -10,6 +10,7 @@ public class WeightedNamedEdge extends DefaultEdge
 	private String m_name;
 	private final boolean m_directed;
 
+									//Start          Ende              gerichtet?
 	public WeightedNamedEdge(String inSource, String inTarget, boolean inDirected)
 	{
 		super();
@@ -53,5 +54,16 @@ public class WeightedNamedEdge extends DefaultEdge
 	public boolean isDirected()
 	{
 		return m_directed;
+	}
+	
+	//toString()
+	public String toString()
+	{
+		if (m_directed){
+		return "[->]"+"["+getName()+"]"+"[: "+getWeigth()+"]";
+		}
+		else{
+		return "[--]"+"["+getName()+"]"+"[: "+getWeigth()+"]";
+		}
 	}
 }
