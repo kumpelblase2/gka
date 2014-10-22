@@ -1,13 +1,15 @@
 package aufgabe1.gui;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
+import aufgabe1.BFSSearcher;
 import aufgabe1.WeightedNamedEdge;
 import com.mxgraph.layout.mxCircleLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.util.mxConstants;
 import org.jgrapht.Graph;
 import org.jgrapht.ext.JGraphXAdapter;
 
@@ -46,11 +48,7 @@ public class MainWindow extends JFrame
 			@Override
 			public void actionPerformed(final ActionEvent e)
 			{
-				if(m_adapter.getSelectionCell() != null)
-				{
-					mxCell cell = (mxCell)m_adapter.getSelectionCell();
-					m_startVertex = (String)cell.getValue();
-				}
+				setStart();
 			}
 		});
 
@@ -59,11 +57,7 @@ public class MainWindow extends JFrame
 			@Override
 			public void actionPerformed(final ActionEvent e)
 			{
-				if(m_adapter.getSelectionCell() != null)
-				{
-					mxCell cell = (mxCell)m_adapter.getSelectionCell();
-					m_endVertex = (String)cell.getValue();
-				}
+				setEnd();
 			}
 		});
 
@@ -79,8 +73,62 @@ public class MainWindow extends JFrame
 		layout.execute(this.m_adapter.getDefaultParent());
 	}
 
+	private void setStart()
+	{
+		if(m_adapter.getSelectionCell() != null)
+		{
+			mxCell cell = (mxCell)m_adapter.getSelectionCell();
+			m_startVertex = (String)cell.getValue();
+		}
+	}
+
+	private void setEnd()
+	{
+		if(m_adapter.getSelectionCell() != null)
+		{
+			mxCell cell = (mxCell)m_adapter.getSelectionCell();
+			m_endVertex = (String)cell.getValue();
+		}
+	}
+
 	private void doSearch()
 	{
+		java.util.List<String> path = BFSSearcher.search(this.m_graph, this.m_startVertex, this.m_endVertex);
+		if(path.size() == 0)
+		{
+			JOptionPane.showMessageDialog(this, "Es wurde kein Pfad gefunden.", "Fehler", JOptionPane.OK_OPTION);
+			return;
+		}
 
+		for(int i = 0; i < path.size(); i++)
+		{
+			String start = path.get(i);
+			colorVertex(start);
+			if(i + 1 < path.size())
+			{
+				String end = path.get(i + 1);
+				colorEdge(start, end);
+				System.out.println("Color " + start + " to " + end);
+			}
+		}
+	}
+
+	private void colorEdge(String inStart, String inEnd)
+	{
+		this.colorCell(this.m_adapter.getEdgeToCellMap().get(this.m_graph.getEdge(inStart, inEnd)));
+	}
+
+	private void colorVertex(String inVertex)
+	{
+		this.colorCell(this.m_adapter.getVertexToCellMap().get(inVertex));
+	}
+
+	private void colorCell(Object inCell)
+	{
+		this.m_adapter.setCellStyles(mxConstants.STYLE_STROKECOLOR, "#FF0000", new Object[] { inCell });
+	}
+
+	private void resetColors()
+	{
 	}
 }
