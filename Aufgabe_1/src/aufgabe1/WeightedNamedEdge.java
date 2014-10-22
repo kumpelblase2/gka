@@ -21,7 +21,7 @@ public class WeightedNamedEdge extends DefaultEdge
 
 	public int getWeigth()
 	{
-		return m_weigth;
+		return (hasWeigth() ? this.m_weigth : 1);
 	}
 
 	public void setWeigth(final int inWeigth)
@@ -58,7 +58,7 @@ public class WeightedNamedEdge extends DefaultEdge
 
 	public boolean hasWeigth()
 	{
-		return this.getWeigth() != Integer.MIN_VALUE;
+		return this.m_weigth != Integer.MIN_VALUE;
 	}
 	//toString()
 	public String toString()
