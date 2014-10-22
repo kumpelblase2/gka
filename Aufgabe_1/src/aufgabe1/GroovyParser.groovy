@@ -1,11 +1,8 @@
 package aufgabe1
+import org.jgrapht.Graph
+import org.jgrapht.graph.DefaultDirectedWeightedGraph
 
 import java.nio.charset.Charset
-
-import org.jgraph.graph.DefaultEdge;
-import org.jgrapht.Graph
-import org.jgrapht.graph.DefaultDirectedWeightedGraph;
-
 /*For Parsing .gka-Files, to get Vertices and Edges.
  *Written by Sebastian Diedrich
  *Date: 2014-10-10
@@ -37,7 +34,7 @@ class GroovyParser {
 	}
 	
 	//Method for parsing each line of the gka-file
-	def parse(){
+	public Graph<String, WeightedNamedEdge> parse(){
 		
 			//define Pattern (java.util.regex.Pattern)
 			//each "(...)" contains later a part of the match; $=end of Pattern
@@ -98,6 +95,7 @@ class GroovyParser {
 		println "Eingelesene Zeilen: ${count}"
 		println "Keine Übereinstimmung in ${noMatchFound}"
 		println graphT
+        return graphT
 	}
 	
 }
