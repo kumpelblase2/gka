@@ -34,6 +34,7 @@ public class BFSSearcher
 					newVisited.name = target;
 					newVisited.parent = current;
 					newVisited.value = value;
+					visited.put(target, newVisited);
 					queue.offer(target);
 				}
 				else
