@@ -1,8 +1,8 @@
 package aufgabe1.gui;
 
-import java.io.File;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
+import java.io.File;
 import aufgabe1.GroovyParser;
 
 public class MainGUI
@@ -15,7 +15,7 @@ public class MainGUI
 			@Override
 			public boolean accept(final File f)
 			{
-				return f.isFile() && f.getName().endsWith(".gka");
+				return f.isDirectory() || (f.isFile() && f.getName().endsWith(".gka"));
 			}
 
 			@Override
