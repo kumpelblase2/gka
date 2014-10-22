@@ -1,9 +1,9 @@
 package aufgabe1.gui;
 
+import java.io.File;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
-import java.io.File;
-import aufgabe1.GroovyParser;
+import aufgabe1.GraphParser;
 
 public class MainGUI
 {
@@ -27,8 +27,7 @@ public class MainGUI
 		int result = fileChooser.showOpenDialog(null);
 		if(result == JFileChooser.APPROVE_OPTION)
 		{
-			GroovyParser parser = new GroovyParser();
-			parser.setPath(fileChooser.getSelectedFile().getAbsolutePath());
+			GraphParser parser = new GraphParser(fileChooser.getSelectedFile());
 			MainWindow window = new MainWindow(parser.parse());
 			window.setVisible(true);
 		}

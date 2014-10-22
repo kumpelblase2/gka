@@ -1,15 +1,16 @@
 package aufgabe1.gui;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
 import aufgabe1.BFSSearcher;
 import aufgabe1.WeightedNamedEdge;
 import com.mxgraph.layout.mxCircleLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxConstants;
+import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.ext.JGraphXAdapter;
 
@@ -38,7 +39,8 @@ public class MainWindow extends JFrame
 		this.m_endButton = new JButton("Set end");
 		this.m_runButton = new JButton("Run BFS");
 		this.m_adapter = new JGraphXAdapter<String, WeightedNamedEdge>(this.m_graph);
-		this.getContentPane().add(new mxGraphComponent(this.m_adapter));
+		mxGraphComponent component = new mxGraphComponent(this.m_adapter);
+		this.getContentPane().add(component);
 		mxCircleLayout layout = new mxCircleLayout(this.m_adapter);
 		this.getContentPane().add(this.m_startButton);
 		this.getContentPane().add(this.m_endButton);
@@ -71,6 +73,9 @@ public class MainWindow extends JFrame
 		});
 		this.getContentPane().setLayout(new FlowLayout());
 		layout.execute(this.m_adapter.getDefaultParent());
+		component.getGraph().setCellsEditable(false);
+		if(!(this.m_graph instanceof DirectedGraph))
+			component.getGraph().setCellStyles(mxConstants.STYLE_ENDARROW, mxConstants.NONE, component.getGraph().getChildEdges(component.getGraph().getDefaultParent()));
 	}
 
 	private void setStart()
@@ -96,7 +101,7 @@ public class MainWindow extends JFrame
 		java.util.List<String> path = BFSSearcher.search(this.m_graph, this.m_startVertex, this.m_endVertex);
 		if(path.size() == 0)
 		{
-			JOptionPane.showMessageDialog(this, "Es wurde kein Pfad gefunden.", "Fehler", JOptionPane.OK_OPTION);
+			JOptionPane.showMessageDialog(this, "Es wurde kein Pfad gefunden.", "Fehler", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
@@ -111,6 +116,8 @@ public class MainWindow extends JFrame
 				System.out.println("Color " + start + " to " + end);
 			}
 		}
+
+		JOptionPane.showMessageDialog(this, "Path found with " + (path.size() - 1) + " edge(s).", "Path found", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	private void colorEdge(String inStart, String inEnd)
