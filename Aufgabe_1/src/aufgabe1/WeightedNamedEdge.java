@@ -6,7 +6,7 @@ public class WeightedNamedEdge extends DefaultEdge
 {
 	private final String m_source;
 	private final String m_target;
-	private int m_weigth = 0;
+	private int m_weigth = Integer.MIN_VALUE;
 	private String m_name;
 	private final boolean m_directed;
 
@@ -55,15 +55,21 @@ public class WeightedNamedEdge extends DefaultEdge
 	{
 		return m_directed;
 	}
-	
+
+	public boolean hasWeigth()
+	{
+		return this.getWeigth() != Integer.MIN_VALUE;
+	}
 	//toString()
 	public String toString()
 	{
-		if (m_directed){
-		return "[->]"+"["+getName()+"]"+"[: "+getWeigth()+"]";
-		}
-		else{
-		return "[--]"+"["+getName()+"]"+"[: "+getWeigth()+"]";
-		}
+		String returnName = "";
+		if(getName() != null)
+			returnName += (isDirected() ? "->" : "--") + " " + getName();
+
+		if(hasWeigth())
+			returnName += (returnName.length() > 0 ? " : " : "") + getWeigth();
+
+		return returnName;
 	}
 }
