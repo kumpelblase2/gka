@@ -72,8 +72,8 @@ public class GraphParser
 			String vertexStart = matcher.group(1);
 			String edgeType = matcher.group(3);
 			String vertexEnd = matcher.group(4);
-			String edgeName = matcher.group(5);
-			String edgeWeight = matcher.group(6);
+			String edgeName = matcher.group(6);
+			String edgeWeight = matcher.group(8);
 
 			WeightedNamedEdge edge = null;
 			//add Vertex to the graphT
