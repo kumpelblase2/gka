@@ -4,7 +4,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.junit.Before;
 import org.junit.Test;
-import org.testng.Assert;
+import org.junit.Assert;
 
 public class BFSSearcherTest
 {
