@@ -3,13 +3,18 @@ package aufgabe1.gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.*;
+
 import aufgabe1.BFSSearcher;
+import aufgabe1.Path;
 import aufgabe1.WeightedNamedEdge;
+
 import com.mxgraph.layout.mxCircleLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxConstants;
+
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.ext.JGraphXAdapter;
@@ -18,6 +23,7 @@ public class MainWindow extends JFrame
 {
 	private final Graph<String, WeightedNamedEdge> m_graph;
 	private JGraphXAdapter<String, WeightedNamedEdge> m_adapter;
+	private mxGraphComponent m_component;
 	private JButton m_startButton;
 	private JButton m_endButton;
 	private JButton m_runButton;
@@ -39,8 +45,8 @@ public class MainWindow extends JFrame
 		this.m_endButton = new JButton("Set end");
 		this.m_runButton = new JButton("Run BFS");
 		this.m_adapter = new JGraphXAdapter<String, WeightedNamedEdge>(this.m_graph);
-		mxGraphComponent component = new mxGraphComponent(this.m_adapter);
-		this.getContentPane().add(component);
+		this.m_component = new mxGraphComponent(this.m_adapter);
+		this.getContentPane().add(this.m_component);
 		mxCircleLayout layout = new mxCircleLayout(this.m_adapter);
 		this.getContentPane().add(this.m_startButton);
 		this.getContentPane().add(this.m_endButton);
@@ -73,9 +79,11 @@ public class MainWindow extends JFrame
 		});
 		this.getContentPane().setLayout(new FlowLayout());
 		layout.execute(this.m_adapter.getDefaultParent());
-		component.getGraph().setCellsEditable(false);
+		this.m_component.getGraph().setCellsEditable(false);
 		if(!(this.m_graph instanceof DirectedGraph))
-			component.getGraph().setCellStyles(mxConstants.STYLE_ENDARROW, mxConstants.NONE, component.getGraph().getChildEdges(component.getGraph().getDefaultParent()));
+			this.m_component.getGraph().setCellStyles(mxConstants.STYLE_ENDARROW, mxConstants.NONE, this.m_component.getGraph().getChildEdges(this.m_component.getGraph().getDefaultParent()));
+		
+		this.resetColors();
 	}
 
 	private void setStart()
@@ -98,7 +106,9 @@ public class MainWindow extends JFrame
 
 	private void doSearch()
 	{
-		java.util.List<String> path = BFSSearcher.search(this.m_graph, this.m_startVertex, this.m_endVertex);
+		this.resetColors();
+		Path pathResult = BFSSearcher.search(this.m_graph, this.m_startVertex, this.m_endVertex);
+		java.util.List<String> path = pathResult.getVertexes();
 		if(path.size() == 0)
 		{
 			JOptionPane.showMessageDialog(this, "Es wurde kein Pfad gefunden.", "Fehler", JOptionPane.ERROR_MESSAGE);
@@ -137,5 +147,7 @@ public class MainWindow extends JFrame
 
 	private void resetColors()
 	{
+		this.m_component.getGraph().setCellStyles(mxConstants.STYLE_STROKECOLOR, "#6495ED", this.m_component.getGraph().getChildEdges(this.m_component.getGraph().getDefaultParent()));
+		this.m_component.getGraph().setCellStyles(mxConstants.STYLE_STROKECOLOR, "#6495ED", this.m_component.getGraph().getChildVertices(this.m_component.getGraph().getDefaultParent()));
 	}
 }

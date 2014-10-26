@@ -8,25 +8,20 @@ import org.jgrapht.Graph;
 import org.jgrapht.graph.*;
 
 public class GraphParser
-{	
-	//Pattern definieren für das Zeilenlayout
+{
 	public static final Pattern REGEX = Pattern.compile("([a-zA-Z0-9]+) ?(-(>|-) ?([a-zA-Z0-9]+) ?(\\(([a-zA-Z0-9]+)\\))?)? ?( ?: ?([0-9]+))?;");
-	//zu parsender String
 	private String m_content = "";
-	
-	//1. Konstruktor
+
 	public GraphParser(String inContent)
 	{
 		this.m_content = inContent;
 	}
-	
-	//2. Konstruktor übergebene Datei wird eingelesen
+
 	public GraphParser(File inFile)
 	{
-		this.m_content = this.readFile(inFile); //beinhaltet dann das whole aus Zeile 38
+		this.m_content = this.readFile(inFile);
 	}
-	
-	//liest den kompletten Inhalt einer Datei und gibt diesen zurück
+
 	private String readFile(final File inFile)
 	{
 		BufferedReader reader = null;
@@ -34,7 +29,6 @@ public class GraphParser
 		{
 			reader = new BufferedReader(new InputStreamReader(new FileInputStream(inFile), Charset.forName("ISO-8859-1")));
 			String currentLine;
-			//gesamte String
 			String whole = "";
 			while((currentLine = reader.readLine()) != null)
 			{
@@ -64,21 +58,17 @@ public class GraphParser
 		return "";
 	}
 
-	//Funktion zum eigenlichen Parsen
 	public Graph<String, WeightedNamedEdge> parse()
 	{
-		//Matcher für den gegebenen String
 		Matcher matcher = REGEX.matcher(this.m_content);
 		Graph<String, WeightedNamedEdge> graph;
-		//schaut ob gerichtet oder ungerichtet
 		if(this.m_content.contains("->"))
 			graph = new DefaultDirectedGraph<String, WeightedNamedEdge>(WeightedNamedEdge.class);
-		else		
+		else
 			graph = new DefaultGraph();
-		//so lange eine Zeile gefunden wird
+
 		while(matcher.find())
 		{
-			//Zuweisung der Values
 			String vertexStart = matcher.group(1);
 			String edgeType = matcher.group(3);
 			String vertexEnd = matcher.group(4);
@@ -86,9 +76,9 @@ public class GraphParser
 			String edgeWeight = matcher.group(8);
 
 			WeightedNamedEdge edge = null;
-			//Knoten zum Graph hinzufügen
+			//add Vertex to the graphT
 			graph.addVertex(vertexStart);
-			//wenn eine Kante definiert wurde
+			//if there is an edge between two vertices
 			if(vertexEnd != null)
 			{
 				edge = new WeightedNamedEdge(vertexStart, vertexEnd, edgeType.equals(">"));
@@ -101,11 +91,11 @@ public class GraphParser
 				//ggf Namen hinzufuegen
 				if (edgeName != null)
 					edge.setName(edgeName);
-				//Kante zum Graph hinzufügen
+
 				graph.addEdge(vertexStart, vertexEnd, edge);
 			}
 		}
-		
+
 		return graph;
 	}
 }
