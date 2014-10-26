@@ -52,26 +52,30 @@ public class BFSSearcherTest
 	@Test
 	public void testSuccess()
 	{
-		Assert.assertTrue(BFSSearcher.search(graph, "a", "c").size() > 0);
-		Assert.assertTrue(BFSSearcher.search(graph, "a", "b").size() > 0);
-		Assert.assertTrue(BFSSearcher.search(graph, "c", "b").size() > 0);
-		Assert.assertTrue(BFSSearcher.search(graph, "a", "d").size() > 0);
+		// Prüft ob ein Weg mit dem Parser gefunden wurde.
+		Assert.assertTrue(BFSSearcher.search(graph, "a", "c").getVertexes().size() > 0);
+		Assert.assertTrue(BFSSearcher.search(graph, "a", "b").getVertexes().size() > 0);
+		Assert.assertTrue(BFSSearcher.search(graph, "c", "b").getVertexes().size() > 0);
+		Assert.assertTrue(BFSSearcher.search(graph, "a", "d").getVertexes().size() > 0);
 	}
 
 	@Test
 	public void testFail()
 	{
-		Assert.assertEquals(BFSSearcher.search(graph, "c", "a").size(), 0);
-		Assert.assertEquals(BFSSearcher.search(graph, "b", "a").size(), 0);
-		Assert.assertEquals(BFSSearcher.search(graph, "b", "c").size(), 0);
-		Assert.assertEquals(BFSSearcher.search(graph, "d", "a").size(), 0);
+		// Prüft, dass keine Weg gefunden wurde, auch wenn im Ungerichteten Graphen ein Weg vorliegt.
+		Assert.assertEquals(BFSSearcher.search(graph, "c", "a").getVertexes().size(), 0);
+		Assert.assertEquals(BFSSearcher.search(graph, "b", "a").getVertexes().size(), 0);
+		Assert.assertEquals(BFSSearcher.search(graph, "b", "c").getVertexes().size(), 0);
+		Assert.assertEquals(BFSSearcher.search(graph, "d", "a").getVertexes().size(), 0);
 
-		Assert.assertEquals(BFSSearcher.search(graph3, "a", "c").size(), 0);
+		// Prüft, dass kein Weg gefunden wurde, wenn keine Verbindung besteht.
+		Assert.assertEquals(BFSSearcher.search(graph3, "a", "c").getVertexes().size(), 0);
 	}
 
 	@Test
 	public void testBestPath()
 	{
-		Assert.assertEquals(BFSSearcher.search(graph2, "a", "c").size(), 3);
+		// Prüft, dass der vom Wert her beste Weg gefunden wurde.
+		Assert.assertEquals(BFSSearcher.search(graph2, "a", "c").getVertexes().size(), 3);
 	}
 }
