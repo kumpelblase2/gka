@@ -73,7 +73,7 @@ public class GraphParser
 		//schaut ob gerichtet oder ungerichtet
 		if(this.m_content.contains("->"))
 			graph = new DefaultDirectedGraph<String, WeightedNamedEdge>(WeightedNamedEdge.class);
-		else
+		else		
 			graph = new DefaultGraph();
 		//so lange eine Zeile gefunden wird
 		while(matcher.find())
