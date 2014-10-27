@@ -1,20 +1,14 @@
 package aufgabe1.gui;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.*;
-
-import aufgabe1.BFSSearcher;
-import aufgabe1.Path;
-import aufgabe1.WeightedNamedEdge;
-
+import aufgabe1.*;
 import com.mxgraph.layout.mxCircleLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxConstants;
-
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.ext.JGraphXAdapter;
@@ -29,6 +23,7 @@ public class MainWindow extends JFrame
 	private JButton m_runButton;
 	private String m_startVertex;
 	private String m_endVertex;
+	private SearchAlgorithm m_search = new BFSSearcher();
 
 	public MainWindow(Graph<String, WeightedNamedEdge> inGraph)
 	{
@@ -107,7 +102,8 @@ public class MainWindow extends JFrame
 	private void doSearch()
 	{
 		this.resetColors();
-		Path pathResult = BFSSearcher.search(this.m_graph, this.m_startVertex, this.m_endVertex);
+
+		Path pathResult = this.m_search.search(this.m_graph, this.m_startVertex, this.m_endVertex);
 		java.util.List<String> path = pathResult.getVertexes();
 		if(path.size() == 0)
 		{

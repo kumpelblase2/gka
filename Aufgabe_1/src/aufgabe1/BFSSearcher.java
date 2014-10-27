@@ -4,9 +4,9 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import org.jgrapht.Graph;
 
-public class BFSSearcher
+public class BFSSearcher implements SearchAlgorithm
 {
-	public static Path search(Graph<String, WeightedNamedEdge> inGraph, String inStart, String inEnd)
+	public Path search(Graph<String, WeightedNamedEdge> inGraph, String inStart, String inEnd)
 	{
 		Path path = new Path();
 		if(!inGraph.containsVertex(inStart) || !inGraph.containsVertex(inEnd))
@@ -24,6 +24,7 @@ public class BFSSearcher
 		{
 			String current = queue.poll();
 			VisitedNode node = visited.get(current);
+			path.setSteps(path.getSteps() + 1);
 			for(WeightedNamedEdge edge : inGraph.edgesOf(current))
 			{
 				String target = edge.getTarget();
