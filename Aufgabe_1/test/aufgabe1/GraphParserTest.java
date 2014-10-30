@@ -18,7 +18,7 @@ public class GraphParserTest
 			"b -> d test;"
 	};
 
-	private final Graph<String, WeightedNamedEdge> resultGraph = new DefaultDirectedGraph<String, WeightedNamedEdge>(WeightedNamedEdge.class);
+	private final Graph<String, WeightedNamedEdge> resultGraph = new DefaultDirectedGraph<>(WeightedNamedEdge.class);
 
 	@Before
 	public void setup()
@@ -44,7 +44,7 @@ public class GraphParserTest
 	@Test
 	public void testParseSuccess()
 	{
-		Graph<String, WeightedNamedEdge> parsed = new GraphParser(success1).parse();
+		Graph<String, WeightedNamedEdge> parsed = GraphParser.parse(success1);
 		Assert.assertEquals(parsed.vertexSet(), resultGraph.vertexSet());
 		Assert.assertEquals(parsed.edgeSet(), resultGraph.edgeSet());
 	}
@@ -54,7 +54,7 @@ public class GraphParserTest
 	{
 		for(String failed : fail)
 		{
-			Graph<String, WeightedNamedEdge> parsed = new GraphParser(failed).parse();
+			Graph<String, WeightedNamedEdge> parsed = GraphParser.parse(failed);
 			Assert.assertEquals(0, parsed.vertexSet().size());
 			Assert.assertEquals(0, parsed.edgeSet().size());
 		}

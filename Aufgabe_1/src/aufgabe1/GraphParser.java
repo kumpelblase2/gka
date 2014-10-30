@@ -1,6 +1,8 @@
 package aufgabe1;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.jgrapht.Graph;
@@ -9,24 +11,18 @@ import org.jgrapht.graph.DefaultDirectedGraph;
 public class GraphParser
 {
 	public static final Pattern REGEX = Pattern.compile("([a-zA-Z0-9]+) ?(-(>|-) ?([a-zA-Z0-9]+) ?(\\(([a-zA-Z0-9]+)\\))?)? ?( ?: ?([0-9]+))?;");
-	private String m_content = "";
 
-	public GraphParser(String inContent)
+	public static Graph<String, WeightedNamedEdge> parse(File inFile)
 	{
-		this.m_content = inContent;
+		return parse(Util.readFile(inFile));
 	}
 
-	public GraphParser(File inFile)
+	public static Graph<String, WeightedNamedEdge> parse(String inContent)
 	{
-		this.m_content = Util.readFile(inFile);
-	}
-
-	public Graph<String, WeightedNamedEdge> parse()
-	{
-		Matcher matcher = REGEX.matcher(this.m_content);
+		Matcher matcher = REGEX.matcher(inContent);
 		Graph<String, WeightedNamedEdge> graph;
-		if(this.m_content.contains("->"))
-			graph = new DefaultDirectedGraph<String, WeightedNamedEdge>(WeightedNamedEdge.class);
+		if(inContent.contains("->"))
+			graph = new DefaultDirectedGraph<>(WeightedNamedEdge.class);
 		else
 			graph = new DefaultGraph();
 
@@ -60,5 +56,34 @@ public class GraphParser
 		}
 
 		return graph;
+	}
+
+	public static String parse(Graph<String, WeightedNamedEdge> inGraph)
+	{
+		StringBuilder result = new StringBuilder();
+		Set<String> foundEdges = new HashSet<>();
+		for(WeightedNamedEdge edge : inGraph.edgeSet())
+		{
+			result.append(edge.getSource()).append(" ").append(edge.isDirected() ? "->" : "--").append(" ").append(edge.getTarget());
+			foundEdges.add(edge.getSource());
+			foundEdges.add(edge.getTarget());
+			if(edge.getName() != null && edge.getName().length() > 0)
+				result.append(" (").append(edge.getName()).append(")");
+
+			if(edge.hasWeigth())
+				result.append(" : ").append(edge.getWeigth());
+
+			result.append(";\n");
+		}
+
+		for(String vertex : inGraph.vertexSet())
+		{
+			if(!foundEdges.contains(vertex))
+				result.append(vertex).append(";\n"); // TODO should be system line separator
+		}
+
+		foundEdges.clear();
+
+		return result.toString();
 	}
 }
