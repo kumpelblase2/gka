@@ -26,6 +26,7 @@ public class GraphParser
 		else
 			graph = new DefaultGraph();
 
+		// TODO: RegEx should not be allowed to start mid-line. Otherwise lines like 'a -< b;' will still be parsed (wrongly however).
 		while(matcher.find())
 		{
 			String vertexStart = matcher.group(1);

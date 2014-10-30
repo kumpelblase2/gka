@@ -10,7 +10,8 @@ public class GraphParserTest
 			"a -> b;\n" +
 			"a->c;\n" +
 			"e-> d : 5;\n" +
-			"f ->g (testing);\n";
+			"f ->g (testing);\n" +
+			"h;\n";
 
 	private final String[] fail = {
 			"a -< b;",
@@ -19,6 +20,13 @@ public class GraphParserTest
 	};
 
 	private final Graph<String, WeightedNamedEdge> resultGraph = new DefaultDirectedGraph<>(WeightedNamedEdge.class);
+
+	private final String resultString = "" +
+			"a -> b;\n" +
+			"a -> c;\n" +
+			"e -> d : 5;\n" +
+			"f -> g (testing);\n" +
+			"h;\n";
 
 	@Before
 	public void setup()
@@ -30,6 +38,7 @@ public class GraphParserTest
 		resultGraph.addVertex("d");
 		resultGraph.addVertex("f");
 		resultGraph.addVertex("g");
+		resultGraph.addVertex("h");
 
 		resultGraph.addEdge("a", "b", new WeightedNamedEdge("a", "b", true));
 		resultGraph.addEdge("a", "c", new WeightedNamedEdge("a", "c", true));
@@ -55,8 +64,15 @@ public class GraphParserTest
 		for(String failed : fail)
 		{
 			Graph<String, WeightedNamedEdge> parsed = GraphParser.parse(failed);
-			Assert.assertEquals(0, parsed.vertexSet().size());
-			Assert.assertEquals(0, parsed.edgeSet().size());
+			Assert.assertEquals("No error in vertexes when parsing " + failed, 0, parsed.vertexSet().size());
+			Assert.assertEquals("No error in edges when parsing " + failed, 0, parsed.edgeSet().size());
 		}
+	}
+
+	@Test
+	public void testToStringParse()
+	{
+		String parsed = GraphParser.parse(resultGraph);
+		Assert.assertEquals(parsed, resultString);
 	}
 }
