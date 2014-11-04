@@ -1,6 +1,8 @@
 package aufgabe1;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.jgrapht.Graph;
 
@@ -10,16 +12,14 @@ public class FWSearcher {
 		
 		Path path = new Path();
 		
-		/*
-		
 		//Start or End-Vertex is not in Graph
 		if(!inGraph.containsVertex(inStart) || !inGraph.containsVertex(inEnd)){
 			return path;
 		}
 		
-		*/
 		
 		int numberOfVertecis = inGraph.vertexSet().size(); 
+		//Set -> ArrayList
 		ArrayList<String> vertices = new ArrayList<>(inGraph.vertexSet());
 		
 		System.out.println(vertices);
@@ -99,6 +99,7 @@ public class FWSearcher {
 								matrixD.get(i).add(k, minimum);
 								//set matrixT_ik
 								matrixT.get(i).remove(k);
+								
 								matrixT.get(i).add(k, (j+1)); //j+1 because we start with j=0
 							}
 							
@@ -123,8 +124,31 @@ public class FWSearcher {
 		}
 		
 		//path finding
-		//TO-DO
-
+		int i = vertices.indexOf(inStart);
+		int j = vertices.indexOf(inEnd);
+		
+		//if matrixD(inStart, inEnd) = 9999 (there no way!)
+		if(matrixD.get(i).get(j)==9999){
+			return path;
+		}
+		
+		//else
+		int t_temp = matrixT.get(i).get(j);
+		
+		path.getVertexes().add(inEnd);
+		
+		while(t_temp > 0){
+			t_temp = t_temp-1; //because we had added +1
+			//System.out.println(t_temp);
+			path.getVertexes().add(vertices.get(t_temp));
+			//System.out.println(path.getVertexes());
+			t_temp = matrixT.get(i).get(t_temp);
+		}
+		path.getVertexes().add(inStart);
+		
+		Collections.reverse(path.getVertexes());
+		
+		System.out.println(path.getVertexes());
 		
 		return path;
 	}
