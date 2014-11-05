@@ -1,6 +1,6 @@
 package aufgabe1;
 
-import java.io.File;
+import java.io.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -86,5 +86,25 @@ public class GraphParser
 		foundEdges.clear();
 
 		return result.toString();
+	}
+
+	public static boolean parse(Graph<String, WeightedNamedEdge> inGraph, File inOutput)
+	{
+		String parsed = parse(inGraph);
+		if(!inOutput.exists())
+		{
+			try
+			{
+				if(!inOutput.createNewFile())
+					return false;
+			}
+			catch(Exception e)
+			{
+				return false;
+			}
+		}
+
+		Util.writeFile(inOutput, parsed);
+		return true;
 	}
 }
