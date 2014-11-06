@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.jgrapht.Graph;
 
-public class FWSearcher {
+public class FWSearcher implements SearchAlgorithm {
 	
-	public static Path search(Graph<String, WeightedNamedEdge> inGraph, String inStart, String inEnd){
+	public Path search(Graph<String, WeightedNamedEdge> inGraph, String inStart, String inEnd){
 		
 		Path path = new Path();
 		
