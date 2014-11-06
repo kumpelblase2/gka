@@ -49,7 +49,7 @@ public class FWSearcher {
 				}
 				//there is "no" edge to the vertex
 				else if(inGraph.getAllEdges(knoten, vertices.get(index)).size()==0){
-					weight=9999;
+					weight=Integer.MAX_VALUE;
 				}
 				//there is an edge to the vertex
 				else{
@@ -90,17 +90,20 @@ public class FWSearcher {
 							int temp_ik = matrixD.get(i).get(k);
 							int temp_ij = matrixD.get(i).get(j);
 							int temp_jk = matrixD.get(j).get(k);
-							//get minimum
-							int minimum = Math.min(temp_ik, (temp_ij + temp_jk));
-							if(temp_ik!=minimum){
-								//remove old value
-								matrixD.get(i).remove(k);
-								//add minimum as new value
-								matrixD.get(i).add(k, minimum);
-								//set matrixT_ik
-								matrixT.get(i).remove(k);
-								
-								matrixT.get(i).add(k, (j+1)); //j+1 because we start with j=0
+							if(temp_ij < Integer.MAX_VALUE && temp_jk < Integer.MAX_VALUE)
+							{
+								//get minimum
+								int minimum = Math.min(temp_ik, (temp_ij + temp_jk));
+								if(temp_ik!=minimum){
+									//remove old value
+									matrixD.get(i).remove(k);
+									//add minimum as new value
+									matrixD.get(i).add(k, minimum);
+									//set matrixT_ik
+									matrixT.get(i).remove(k);
+									
+									matrixT.get(i).add(k, (j+1)); //j+1 because we start with j=0
+								}
 							}
 							
 						}
@@ -127,8 +130,8 @@ public class FWSearcher {
 		int i = vertices.indexOf(inStart);
 		int j = vertices.indexOf(inEnd);
 		
-		//if matrixD(inStart, inEnd) = 9999 (there no way!)
-		if(matrixD.get(i).get(j)==9999){
+		//if matrixD(inStart, inEnd) = MAX INTEGER (there no way!)
+		if(matrixD.get(i).get(j)==Integer.MAX_VALUE){
 			return path;
 		}
 		
