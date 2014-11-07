@@ -1,5 +1,8 @@
 package aufgabe1;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.junit.Assert;
@@ -8,24 +11,17 @@ import org.junit.Test;
 
 public class FWSearchTest
 {
-	Graph<String, WeightedNamedEdge> graph;
+
 	Graph<String, WeightedNamedEdge> graph2;
-	Graph<String, WeightedNamedEdge> graph3;
 	final FWSearcher search = new FWSearcher();
+	
+	private final Graph<String, WeightedNamedEdge> resultGraph = new DefaultDirectedGraph<>(WeightedNamedEdge.class);
+	private List<String> list = new ArrayList<String>();
+    private Path resultPath = new Path();
 
 	@Before
 	public void setup()
 	{
-		graph = new DefaultDirectedGraph<String, WeightedNamedEdge>(WeightedNamedEdge.class);
-		graph.addVertex("a");
-		graph.addVertex("b");
-		graph.addVertex("c");
-		graph.addVertex("d");
-
-		graph.addEdge("a", "b", new WeightedNamedEdge("a", "b", true));
-		graph.addEdge("a", "c", new WeightedNamedEdge("a", "c", true));
-		graph.addEdge("c", "b", new WeightedNamedEdge("c", "b", true));
-		graph.addEdge("c", "d", new WeightedNamedEdge("c", "d", true));
 
 		graph2 = new DefaultDirectedGraph<String, WeightedNamedEdge>(WeightedNamedEdge.class);
 		graph2.addVertex("a");
@@ -41,42 +37,80 @@ public class FWSearchTest
 		WeightedNamedEdge weightedEdge3 = new WeightedNamedEdge("b", "c", false);
 		weightedEdge3.setWeigth(1);
 		graph2.addEdge("b", "c", weightedEdge3);
+		
+		//resultGraph
+		resultGraph.addVertex("v1");
+		resultGraph.addVertex("v2");
+		resultGraph.addVertex("v3");
+		resultGraph.addVertex("v4");
+		resultGraph.addVertex("v5");
+		resultGraph.addVertex("v6");
 
-		graph3 = new DefaultDirectedGraph<String, WeightedNamedEdge>(WeightedNamedEdge.class);
-		graph3.addVertex("a");
-		graph3.addVertex("b");
-		graph3.addVertex("c");
+		WeightedNamedEdge edge1 = new WeightedNamedEdge("v1", "v2", true);
+		edge1.setWeigth(1);
+		resultGraph.addEdge("v1", "v2", edge1);
+		
+		WeightedNamedEdge edge2 = new WeightedNamedEdge("v2", "v3", true);
+		edge2.setWeigth(1);
+		resultGraph.addEdge("v2", "v3", edge2);
+		
+		WeightedNamedEdge edge3 = new WeightedNamedEdge("v3", "v5", true);
+		edge3.setWeigth(1);
+		resultGraph.addEdge("v3", "v5", edge3);
+		
+		WeightedNamedEdge edge4 = new WeightedNamedEdge("v1", "v5", true);
+		edge4.setWeigth(6);
+		resultGraph.addEdge("v1", "v5", edge4);
+		
+		WeightedNamedEdge edge5 = new WeightedNamedEdge("v5", "v4", true);
+		edge5.setWeigth(1);
+		resultGraph.addEdge("v5", "v4", edge5);
+		
+		WeightedNamedEdge edge6 = new WeightedNamedEdge("v4", "v6", true);
+		edge6.setWeigth(1);
+		resultGraph.addEdge("v4", "v6", edge6);
+		
+		WeightedNamedEdge edge7 = new WeightedNamedEdge("v3", "v4", true);
+		edge7.setWeigth(4);
+		resultGraph.addEdge("v3", "v4", edge7);
+		
+		list.add("v1");
+		list.add("v2");
+		list.add("v3");
+		list.add("v5");
+		list.add("v4");
+		list.add("v6");
+		
+		resultPath.setVertexes(list);
 
-		graph3.addEdge("a", "b", new WeightedNamedEdge("a", "b", true));
 	}
-
-	@Test
-	public void testSuccess()
-	{
-		// Pr�ft ob ein Weg mit dem Parser gefunden wurde.
-		Assert.assertTrue(search.search(graph, "a", "c").getVertexes().size() > 0);
-		Assert.assertTrue(search.search(graph, "a", "b").getVertexes().size() > 0);
-		Assert.assertTrue(search.search(graph, "c", "b").getVertexes().size() > 0);
-		Assert.assertTrue(search.search(graph, "a", "d").getVertexes().size() > 0);
-	}
+	
 
 	@Test
 	public void testFail()
 	{
-		// Pr�ft, dass keine Weg gefunden wurde, auch wenn im Ungerichteten Graphen ein Weg vorliegt.
-		Assert.assertEquals(search.search(graph, "c", "a").getVertexes().size(), 0);
-		Assert.assertEquals(search.search(graph, "b", "a").getVertexes().size(), 0);
-		Assert.assertEquals(search.search(graph, "b", "c").getVertexes().size(), 0);
-		Assert.assertEquals(search.search(graph, "d", "a").getVertexes().size(), 0);
-
-		// Pr�ft, dass kein Weg gefunden wurde, wenn keine Verbindung besteht.
-		Assert.assertEquals(search.search(graph3, "a", "c").getVertexes().size(), 0);
+		// Prueft, dass kein Weg gefunden wurde, gegen die "Einbahnstrasse"
+		Assert.assertEquals(search.search(resultGraph, "v3", "v1").getVertexes().size(), 0);
 	}
 
 	@Test
 	public void testBestPath()
 	{
-		// Pr�ft, dass der vom Wert her beste Weg gefunden wurde.
+		// Prueft, dass vom Wert her beste Weg gefunden wurde.
 		Assert.assertEquals(search.search(graph2, "a", "c").getVertexes().size(), 3);
+	}
+	
+	@Test
+	public void testBestPath_resultGraph() {
+		// Shortest Way
+		Assert.assertEquals(resultPath.getVertexes(),(search.search(resultGraph, "v1", "v6")).getVertexes());
+
+	}
+	
+	@Test
+	public void testSuccess()
+	{
+		// Prueft ob ein Weg mit dem Parser gefunden wurde.
+		Assert.assertTrue(search.search(resultGraph, "v1", "v6").getVertexes().size() > 0);
 	}
 }
