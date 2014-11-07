@@ -1,9 +1,9 @@
 package aufgabe1.gui;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
 import aufgabe1.*;
 import com.mxgraph.layout.mxCircleLayout;
 import com.mxgraph.model.mxCell;
@@ -23,7 +23,7 @@ public class MainWindow extends JFrame
 	private JButton m_runButton;
 	private String m_startVertex;
 	private String m_endVertex;
-	private SearchAlgorithm m_search = new BFSSearcher();
+	private SearchAlgorithm m_search = new DijkstraSearcher();
 
 	public MainWindow(Graph<String, WeightedNamedEdge> inGraph)
 	{

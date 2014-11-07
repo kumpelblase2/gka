@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import org.jgrapht.Graph;
 
-public class BFSSearcher implements SearchAlgorithm
+public class DijkstraSearcher implements SearchAlgorithm
 {
 	public Path search(Graph<String, WeightedNamedEdge> inGraph, String inStart, String inEnd)
 	{
