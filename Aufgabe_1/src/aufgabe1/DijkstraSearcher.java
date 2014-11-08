@@ -63,6 +63,11 @@ public class DijkstraSearcher implements SearchAlgorithm
 		return path;
 	}
 
+	public String toString()
+	{
+		return "Dijkstra Search";
+	}
+
 	private static class VisitedNode
 	{
 		public String name;
