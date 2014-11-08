@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Path
 {
-	private int m_steps;
+	private int m_steps = 0;
 	private List<String> m_vertexes;
 	
 	public int getSteps() {
