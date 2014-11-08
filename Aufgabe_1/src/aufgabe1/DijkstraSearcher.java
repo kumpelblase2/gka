@@ -12,8 +12,8 @@ public class DijkstraSearcher implements SearchAlgorithm
 		if(!inGraph.containsVertex(inStart) || !inGraph.containsVertex(inEnd))
 			return path;
 
-		Queue<String> queue = new ConcurrentLinkedQueue<String>();
-		Map<String, VisitedNode> visited = new HashMap<String, VisitedNode>();
+		Queue<String> queue = new ConcurrentLinkedQueue<>();
+		Map<String, VisitedNode> visited = new HashMap<>();
 		VisitedNode startVisited = new VisitedNode();
 		startVisited.name = inStart;
 		startVisited.parent = null;
