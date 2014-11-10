@@ -5,12 +5,16 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jgrapht.Graph;
+import org.jgrapht.util.PrefetchIterator.NextElementFunctor;
 
 public class FWSearcher implements SearchAlgorithm {
 	
 	Path path = new Path();
 	ArrayList<String> vertices = new ArrayList<>();
 	String vertexToAdd = "";
+	int numberOfVertecis = 0;
+	ArrayList<ArrayList<Integer>> matrixD;
+	ArrayList<ArrayList<Integer>> matrixT;
 	
 	public Path search(Graph<String, WeightedNamedEdge> inGraph, String inStart, String inEnd){
 		
@@ -19,8 +23,12 @@ public class FWSearcher implements SearchAlgorithm {
 			return path;
 		}
 		
-		int numberOfVertecis = inGraph.vertexSet().size(); 
+		//Number of Vertices in the Graph
+		numberOfVertecis = inGraph.vertexSet().size(); 
+		
+		//Add one step
 		path.setSteps(path.getSteps() + 1);
+		
 		//Set -> ArrayList
 		vertices.addAll(inGraph.vertexSet());
 		
@@ -28,7 +36,7 @@ public class FWSearcher implements SearchAlgorithm {
 		System.out.println("----------------------");
 		
 		//Matrix D (2-D Array)
-		ArrayList<ArrayList<Integer>> matrixD = new ArrayList<>();
+		matrixD = new ArrayList<>();
 		for(int i=0; i < numberOfVertecis; i++){
 			matrixD.add(i, new ArrayList<Integer>());
 		}
@@ -117,7 +125,7 @@ public class FWSearcher implements SearchAlgorithm {
 			}		
 		}
 		
-		//path finding
+		//indices of Start and End for path finding
 		int i = vertices.indexOf(inStart);
 		int j = vertices.indexOf(inEnd);
 		
@@ -127,53 +135,51 @@ public class FWSearcher implements SearchAlgorithm {
 		}
 		
 		//else
-		//Start-End representation in T-Matrix
-		int t_matrix_current = matrixT.get(i).get(j);
 		
-		//add End-Vertex
-		path.getVertexes().add(inEnd);
+		//path
+		ArrayList<String> path_temp = new ArrayList<>();
 		
-		//for saving current
-		int t_matrix_last = j; //start with End-Vertex
+		//Add Start / End to the path_temp
+		path_temp.add(vertices.get(i));
+		path_temp.add(vertices.get(j));
+		System.out.println("Path: "+path_temp);
+		System.out.println("--------------");
 		
-		//stop when (Start-Vertex, t_matrix_current) < 0 --> no shorter "way around" (-1 in matrixT)
-		while(t_matrix_current >= 0){
+		//Break Condition for the while-loop
+		boolean vertexWasAdded = true;
+		
+		while(vertexWasAdded==true){
+			vertexWasAdded=false;
+			//i.e. path_temp = [v1, v4, v6] -> check (v1,v4) and (v4,v6)
+			for(int index = 0; index < path_temp.size()-1; index++){  //-1 because the last vertex is at the right position
+				int temp_int = matrixT.get(vertices.indexOf(path_temp.get(index))).get(vertices.indexOf(path_temp.get(index+1)));
+				if(temp_int != -1){
+					String vertexFound = vertices.get(temp_int);
+					System.out.println("check("+path_temp.get(index)+","+path_temp.get(index+1)+")");
+					System.out.println("Another vertex was found: "+vertexFound);
+					System.out.println("--------------");
+					path_temp.add(index+1, vertexFound);
+					System.out.println("Path: "+path_temp);
+					System.out.println("--------------");
+					vertexWasAdded = true;
+				}
+				else{
+					System.out.println("check("+path_temp.get(index)+","+path_temp.get(index+1)+")");
+					System.out.println("No vertex was found in T-Matrix");
+					System.out.println("--------------");
+				}
+			}
 			
-			//Add found vertex to the path
-			vertexToAdd = vertices.get(t_matrix_current);
-			path.getVertexes().add(vertexToAdd);
-				
-				//if there is a shorter "way around" through another vertex
-				int checker = matrixT.get(t_matrix_current).get(t_matrix_last);
-				//Check it
-				check(checker);
-			
-					//save t_matrix_current for next round
-					t_matrix_last = t_matrix_current;
-					//set t_matrix_current new
-					t_matrix_current = matrixT.get(i).get(t_matrix_current);
 		}
 		
 		printD(matrixD);
 		printT(matrixT);
 		
-		//add Start-Vertex
-		path.getVertexes().add(inStart);
-		
-		Collections.reverse(path.getVertexes());
+		path.setVertexes(path_temp);
 		
 		System.out.println(path.getVertexes());
 		
 		return path;
-	}
-	
-	//Checker-Method
-	private void check(int toCheck){
-		if(toCheck!=-1){
-			System.out.println("found:"+vertices.get(toCheck));
-			int indexOfaddedVertex = path.getVertexes().indexOf(vertexToAdd);
-			path.getVertexes().add(indexOfaddedVertex, vertices.get(toCheck));
-		    }
 	}
 	
 	//Print matrix D
@@ -186,15 +192,11 @@ public class FWSearcher implements SearchAlgorithm {
 	}
 	
 	//Print matrix T
-	public void printT(ArrayList<ArrayList<Integer>> matrix){
+	public void printT(ArrayList<ArrayList<Integer>> matrixT){
 		System.out.println("Matrix T:");
-		ArrayList<ArrayList<Integer>> m_print = new ArrayList<>();
 		
-		for(ArrayList<Integer> aL : matrix){
-			m_print.add(aL);
-		}
-		
-		for(ArrayList<Integer> list : m_print){
+		//plus 1, because "internal" sight is -1
+		for(ArrayList<Integer> list : matrixT){
 			for(int z=0; z < list.size(); z++){
 				Integer zahl = list.get(z);
 					list.remove(z);
@@ -202,8 +204,8 @@ public class FWSearcher implements SearchAlgorithm {
 			}
 		}
 		
-		for(int i=0; i < m_print.size(); i++){
-			System.out.println(m_print.get(i));
+		for(int i=0; i < matrixT.size(); i++){
+			System.out.println(matrixT.get(i));
 		}
 		System.out.println("------------------------");
 	}
