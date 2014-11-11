@@ -2,6 +2,7 @@ package aufgabe1;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
 import org.jgrapht.Graph;
 
 public class DijkstraSearcher implements SearchAlgorithm
@@ -60,6 +61,10 @@ public class DijkstraSearcher implements SearchAlgorithm
 			current = visited.get(current.parent);
 		}
 		Collections.reverse(path.getVertexes());
+		
+		System.out.println("Dij: "+path.getVertexes());
+		System.out.println("Dij: "+path.getSteps());
+		
 		return path;
 	}
 

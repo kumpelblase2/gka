@@ -179,7 +179,8 @@ public class FWSearcher implements SearchAlgorithm {
 		
 		path.setVertexes(path_temp);
 		
-		System.out.println(path.getVertexes());
+		System.out.println("FW: "+path.getVertexes());
+		System.out.println("FW: "+path.getSteps());
 		
 		return path;
 	}
