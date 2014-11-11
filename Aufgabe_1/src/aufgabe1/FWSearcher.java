@@ -52,7 +52,9 @@ public class FWSearcher implements SearchAlgorithm {
 		for(String knoten : vertices){
 			
 			for(int index=0; index < vertices.size(); index++){
+				//Add step
 				path.setSteps(path.getSteps() + 1);
+				
 				int weight;
 				//Distance to your own
 				if(knoten.equals(vertices.get(index))){
