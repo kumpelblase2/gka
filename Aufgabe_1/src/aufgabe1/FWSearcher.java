@@ -16,6 +16,10 @@ public class FWSearcher implements SearchAlgorithm {
 	ArrayList<ArrayList<Integer>> matrixD;
 	ArrayList<ArrayList<Integer>> matrixT;
 	
+	public ArrayList<ArrayList<Integer>> getMatrixT(){
+		return matrixT;
+	}
+	
 	public Path search(Graph<String, WeightedNamedEdge> inGraph, String inStart, String inEnd){
 		
 		//Start or End-Vertex is not in Graph
@@ -42,7 +46,7 @@ public class FWSearcher implements SearchAlgorithm {
 		}
 		
 		//Matrix T (2-D Array)
-		ArrayList<ArrayList<Integer>> matrixT = new ArrayList<>();
+		matrixT = new ArrayList<>();
 		for(int i=0; i < numberOfVertecis; i++){
 				matrixT.add(i, new ArrayList<Integer>());
 		}
