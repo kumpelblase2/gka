@@ -3,6 +3,7 @@ package aufgabe1;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 
 public class DijkstraSearcher implements SearchAlgorithm
@@ -30,7 +31,12 @@ public class DijkstraSearcher implements SearchAlgorithm
 			{
 				String target = edge.getTarget();
 				if(target.equals(current))
+				{
+					if(inGraph instanceof DirectedGraph)
+						continue;
+
 					target = edge.getSource();
+				}
 
 				int value = node.value + edge.getWeigth();
 				if(!visited.containsKey(target))
