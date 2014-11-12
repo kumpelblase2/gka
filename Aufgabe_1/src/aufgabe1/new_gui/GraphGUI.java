@@ -1,14 +1,15 @@
 package aufgabe1.new_gui;
 
-import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
+import javax.swing.*;
 import aufgabe1.*;
 import aufgabe1.gui.GKAFileFilter;
 import com.mxgraph.layout.mxCircleLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxConstants;
+import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.ext.JGraphXAdapter;
 
@@ -216,6 +217,8 @@ public class GraphGUI
 		this.m_graphComponent.setGraph(this.m_adapter);
 		mxCircleLayout layout = new mxCircleLayout(this.m_adapter);
 		layout.execute(this.m_adapter.getDefaultParent());
+		if(!(this.m_currentGraph instanceof DirectedGraph))
+			this.m_graphComponent.getGraph().setCellStyles(mxConstants.STYLE_ENDARROW, mxConstants.NONE, this.m_graphComponent.getGraph().getChildEdges(this.m_graphComponent.getGraph().getDefaultParent()));
 	}
 
 	public static void main(final String[] args)
