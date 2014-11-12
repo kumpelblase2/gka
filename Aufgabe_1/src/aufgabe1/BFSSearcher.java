@@ -29,6 +29,9 @@ public class BFSSearcher implements SearchAlgorithm
 			for(WeightedNamedEdge edge : inGraph.edgesOf(current))
 			{
 				String target = edge.getTarget();
+				if(target.equals(current))
+					target = edge.getSource();
+
 				int value = node.value + 1;
 				if(!visited.containsKey(target))
 				{

@@ -29,6 +29,9 @@ public class DijkstraSearcher implements SearchAlgorithm
 			for(WeightedNamedEdge edge : inGraph.edgesOf(current))
 			{
 				String target = edge.getTarget();
+				if(target.equals(current))
+					target = edge.getSource();
+
 				int value = node.value + edge.getWeigth();
 				if(!visited.containsKey(target))
 				{
