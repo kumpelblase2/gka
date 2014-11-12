@@ -1,9 +1,10 @@
 package aufgabe1.gui;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
+import java.io.File;
 import aufgabe1.*;
 import com.mxgraph.layout.mxCircleLayout;
 import com.mxgraph.model.mxCell;
@@ -23,7 +24,7 @@ public class MainWindow extends JFrame
 	private JButton m_runButton;
 	private String m_startVertex;
 	private String m_endVertex;
-	private SearchAlgorithm m_search = new DijkstraSearcher();
+	private SearchAlgorithm m_search = new BFSSearcher();
 
 	public MainWindow(Graph<String, WeightedNamedEdge> inGraph)
 	{
@@ -36,12 +37,16 @@ public class MainWindow extends JFrame
 
 	public void initComponents()
 	{
+		this.initMenuBar();
 		this.m_startButton = new JButton("Set start");
 		this.m_endButton = new JButton("Set end");
 		this.m_runButton = new JButton("Run BFS");
-		this.m_adapter = new JGraphXAdapter<String, WeightedNamedEdge>(this.m_graph);
+		this.m_adapter = new JGraphXAdapter<>(this.m_graph);
 		this.m_component = new mxGraphComponent(this.m_adapter);
-		this.getContentPane().add(this.m_component);
+		JScrollPane scroll = new JScrollPane(this.m_component);
+		scroll.setSize(100, 100);
+		scroll.setMaximumSize(new Dimension(100, 100));
+		this.getContentPane().add(scroll);
 		mxCircleLayout layout = new mxCircleLayout(this.m_adapter);
 		this.getContentPane().add(this.m_startButton);
 		this.getContentPane().add(this.m_endButton);
@@ -74,11 +79,42 @@ public class MainWindow extends JFrame
 		});
 		this.getContentPane().setLayout(new FlowLayout());
 		layout.execute(this.m_adapter.getDefaultParent());
+		this.m_adapter.setGridSize(2);
 		this.m_component.getGraph().setCellsEditable(false);
 		if(!(this.m_graph instanceof DirectedGraph))
 			this.m_component.getGraph().setCellStyles(mxConstants.STYLE_ENDARROW, mxConstants.NONE, this.m_component.getGraph().getChildEdges(this.m_component.getGraph().getDefaultParent()));
 		
 		this.resetColors();
+	}
+
+	private void initMenuBar()
+	{
+		JMenuBar menu = new JMenuBar();
+		JMenu fileMenu = new JMenu("File");
+		JMenuItem saveItem = new JMenuItem("Save");
+		saveItem.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				saveGraph();
+			}
+		});
+
+		fileMenu.add(saveItem);
+		menu.add(fileMenu);
+		this.setJMenuBar(menu);
+	}
+
+	private void saveGraph()
+	{
+		JFileChooser choose = new JFileChooser(new File("."));
+		choose.setFileFilter(new GKAFileFilter());
+		choose.showSaveDialog(null);
+		if(choose.getSelectedFile() != null)
+		{
+			GraphParser.parse(this.m_graph, choose.getSelectedFile());
+		}
 	}
 
 	private void setStart()

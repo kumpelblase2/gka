@@ -1,8 +1,8 @@
 package aufgabe1.new_gui;
 
+import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
-import javax.swing.*;
 import aufgabe1.*;
 import aufgabe1.gui.GKAFileFilter;
 import com.mxgraph.layout.mxCircleLayout;
@@ -164,13 +164,33 @@ public class GraphGUI
 			}
 		});
 		fileMenu.add(openItem);
+		JMenuItem randomItem = new JMenuItem("Open random");
+		final GraphGUI self = this;
+		randomItem.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				GenerateRandomDialog dialog = new GenerateRandomDialog(self);
+				dialog.pack();
+				dialog.setVisible(true);
+
+			}
+		});
+		fileMenu.add(randomItem);
 		JMenuItem saveItem = new JMenuItem("Save");
 		saveItem.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(final ActionEvent e)
 			{
-				//TODO
+				JFileChooser fileChooser = new JFileChooser(new File("."));
+				fileChooser.setFileFilter(new GKAFileFilter());
+				int result = fileChooser.showOpenDialog(null);
+				if(result == JFileChooser.APPROVE_OPTION)
+				{
+					GraphParser.parse(m_currentGraph, fileChooser.getSelectedFile());
+				}
 			}
 		});
 		fileMenu.add(saveItem);
@@ -189,7 +209,7 @@ public class GraphGUI
 		m_end = inEnd;
 	}
 
-	private void loadGraph(Graph<String, WeightedNamedEdge> inGraph)
+	public void loadGraph(Graph<String, WeightedNamedEdge> inGraph)
 	{
 		this.m_currentGraph = inGraph;
 		this.m_adapter = new JGraphXAdapter<>(inGraph);
