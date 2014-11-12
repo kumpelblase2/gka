@@ -1,15 +1,10 @@
 package aufgabe1;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jgrapht.Graph;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 public class BIG_FW_versus_D {
 
@@ -19,7 +14,7 @@ public class BIG_FW_versus_D {
 	//BIG with 100 Vertices and 6000 Edges
 	
 	//BIG
-    File file = new File("C:/Users/VAIO PRO/Documents/HAW/Eclipse_Projekte/gka/Aufgabe_1/resources/big.gka");
+    File file = new File("./Aufgabe_1/resources/big.gka");
     Graph<String, WeightedNamedEdge> big = GraphParser.parse(file);
     private List<String> listBig = new ArrayList<String>();
     private List<String> listBig2 = new ArrayList<String>();
@@ -35,6 +30,7 @@ public class BIG_FW_versus_D {
 
 	@Before
 	public void setUp() throws Exception {
+		System.out.println(new File(".").getAbsolutePath());
 		listBig.add("v3");
 		listBig.add("v78");
 		listBig.add("v45");

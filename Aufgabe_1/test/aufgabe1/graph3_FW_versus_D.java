@@ -1,18 +1,10 @@
 package aufgabe1;
-import aufgabe1.GraphParser.*;
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultDirectedGraph;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.mxgraph.util.svg.Parser;
+import org.junit.*;
 
 public class graph3_FW_versus_D {
 
@@ -20,7 +12,7 @@ public class graph3_FW_versus_D {
 	final DijkstraSearcher searchD = new DijkstraSearcher();
 	
 	//graph3
-	File file = new File("C:/Users/VAIO PRO/Documents/HAW/Eclipse_Projekte/gka/Aufgabe_1/resources/graph3.gka");
+	File file = new File("./Aufgabe_1/resources/graph3.gka");
 	Graph<String, WeightedNamedEdge> graph3 = GraphParser.parse(file);
 	private List<String> listGraph3 = new ArrayList<String>();
 	private Path resultPathGraph3 = new Path();
@@ -131,7 +123,7 @@ public class graph3_FW_versus_D {
 	@Test
 	public void testShortestWayGraph3() {
 		Assert.assertEquals(resultPathGraph3.getVertexes(),(searchFW.search(graph3, "Hamburg", "Cuxhaven")).getVertexes()); // FW: [Hamburg, Bremen, Cuxhaven] - 485 Zugriffe
-		//Assert.assertEquals(resultPathGraph3.getVertexes(),(searchD.search(graph3, "Hamburg", "Cuxhaven")).getVertexes()); // 
+		Assert.assertEquals(resultPathGraph3.getVertexes(),(searchD.search(graph3, "Hamburg", "Cuxhaven")).getVertexes()); //
 	}
 	
 	

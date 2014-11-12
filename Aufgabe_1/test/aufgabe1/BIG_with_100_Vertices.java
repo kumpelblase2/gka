@@ -1,17 +1,10 @@
 package aufgabe1;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jgrapht.Graph;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import aufgabe1.GraphGenerator.GeneratorProperties;
+import org.junit.*;
 
 public class BIG_with_100_Vertices {
 	
@@ -22,7 +15,7 @@ public class BIG_with_100_Vertices {
 	final DijkstraSearcher searchD2 = new DijkstraSearcher();
 	
 	//BIG
-    File file = new File("C:/Users/VAIO PRO/Documents/HAW/Eclipse_Projekte/gka/Aufgabe_1/resources/big.gka");
+    File file = new File("./Aufgabe_1/resources/big.gka");
     Graph<String, WeightedNamedEdge> big = GraphParser.parse(file);
     private List<String> listBig = new ArrayList<String>();
     private List<String> listBig2 = new ArrayList<String>();
