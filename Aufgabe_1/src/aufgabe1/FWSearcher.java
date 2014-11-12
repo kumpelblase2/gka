@@ -2,8 +2,6 @@ package aufgabe1;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-
 import org.jgrapht.Graph;
 import org.jgrapht.util.PrefetchIterator.NextElementFunctor;
 
@@ -21,7 +19,7 @@ public class FWSearcher implements SearchAlgorithm {
 	}
 	
 	public Path search(Graph<String, WeightedNamedEdge> inGraph, String inStart, String inEnd){
-		
+		path = new Path();
 		//Start or End-Vertex is not in Graph
 		if(!inGraph.containsVertex(inStart) || !inGraph.containsVertex(inEnd)){
 			return path;
@@ -217,4 +215,8 @@ public class FWSearcher implements SearchAlgorithm {
 		System.out.println("------------------------");
 	}
 
+	public String toString()
+	{
+		return "Floyd-Warshall Search";
+	}
 }
