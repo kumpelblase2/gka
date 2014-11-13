@@ -6,12 +6,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.Assert;
 
-public class BFSSearcherTest
+public class DijkstraSearcherTest
 {
 	Graph<String, WeightedNamedEdge> graph;
 	Graph<String, WeightedNamedEdge> graph2;
 	Graph<String, WeightedNamedEdge> graph3;
-	final BFSSearcher search = new BFSSearcher();
+	final DijkstraSearcher search = new DijkstraSearcher();
 
 	@Before
 	public void setup()

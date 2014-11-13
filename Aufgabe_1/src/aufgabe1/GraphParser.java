@@ -10,7 +10,7 @@ import org.jgrapht.graph.DefaultDirectedGraph;
 
 public class GraphParser
 {
-	public static final Pattern REGEX = Pattern.compile("([a-zA-Z0-9]+) ?(-(>|-) ?([a-zA-Z0-9]+) ?(\\(([a-zA-Z0-9]+)\\))?)? ?( ?: ?([0-9]+))?;");
+	public static final Pattern REGEX = Pattern.compile("^([a-zA-Z0-9]+) ?(-(>|-) ?([a-zA-Z0-9]+) ?(\\(([a-zA-Z0-9]+)\\))?)? ?( ?: ?([0-9]+))?;$");
 
 	public static Graph<String, WeightedNamedEdge> parse(File inFile)
 	{
@@ -19,40 +19,41 @@ public class GraphParser
 
 	public static Graph<String, WeightedNamedEdge> parse(String inContent)
 	{
-		Matcher matcher = REGEX.matcher(inContent);
+		String[] lines = inContent.split("\\n");
 		Graph<String, WeightedNamedEdge> graph;
 		if(inContent.contains("->"))
 			graph = new DefaultDirectedGraph<>(WeightedNamedEdge.class);
 		else
 			graph = new DefaultGraph();
 
-		// TODO: RegEx should not be allowed to start mid-line. Otherwise lines like 'a -< b;' will still be parsed (wrongly however).
-		while(matcher.find())
+		for(String line : lines)
 		{
-			String vertexStart = matcher.group(1);
-			String edgeType = matcher.group(3);
-			String vertexEnd = matcher.group(4);
-			String edgeName = matcher.group(6);
-			String edgeWeight = matcher.group(8);
-
-			WeightedNamedEdge edge = null;
-			//add Vertex to the graphT
-			graph.addVertex(vertexStart);
-			//if there is an edge between two vertices
-			if(vertexEnd != null)
+			Matcher matcher = REGEX.matcher(line);
+			if(matcher.find())
 			{
-				edge = new WeightedNamedEdge(vertexStart, vertexEnd, edgeType.equals(">"));
-				graph.addVertex(vertexEnd);
+				String vertexStart = matcher.group(1);
+				String edgeType = matcher.group(3);
+				String vertexEnd = matcher.group(4);
+				String edgeName = matcher.group(6);
+				String edgeWeight = matcher.group(8);
+				//add Vertex to the graphT
+				graph.addVertex(vertexStart);
+				//if there is an edge between two vertices
+				if(vertexEnd != null)
+				{
+					WeightedNamedEdge edge = new WeightedNamedEdge(vertexStart, vertexEnd, edgeType.equals(">"));
+					graph.addVertex(vertexEnd);
 
-				//ggf Gewichtung hinzufuegen
-				if (edgeWeight != null)
-					edge.setWeigth(Integer.parseInt(edgeWeight));
+					//ggf Gewichtung hinzufuegen
+					if (edgeWeight != null)
+						edge.setWeigth(Integer.parseInt(edgeWeight));
 
-				//ggf Namen hinzufuegen
-				if (edgeName != null)
-					edge.setName(edgeName);
+					//ggf Namen hinzufuegen
+					if (edgeName != null)
+						edge.setName(edgeName);
 
-				graph.addEdge(vertexStart, vertexEnd, edge);
+					graph.addEdge(vertexStart, vertexEnd, edge);
+				}
 			}
 		}
 

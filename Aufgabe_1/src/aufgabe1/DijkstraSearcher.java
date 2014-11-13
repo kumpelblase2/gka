@@ -2,13 +2,13 @@ package aufgabe1;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 
-public class BFSSearcher implements SearchAlgorithm
+public class DijkstraSearcher implements SearchAlgorithm
 {
-	@Override
-	public Path search(final Graph<String, WeightedNamedEdge> inGraph, final String inStart, final String inEnd)
+	public Path search(Graph<String, WeightedNamedEdge> inGraph, String inStart, String inEnd)
 	{
 		Path path = new Path();
 		if(!inGraph.containsVertex(inStart) || !inGraph.containsVertex(inEnd))
@@ -38,7 +38,7 @@ public class BFSSearcher implements SearchAlgorithm
 					target = edge.getSource();
 				}
 
-				int value = node.value + 1;
+				int value = node.value + edge.getWeigth();
 				if(!visited.containsKey(target))
 				{
 					VisitedNode newVisited = new VisitedNode();
@@ -47,6 +47,15 @@ public class BFSSearcher implements SearchAlgorithm
 					newVisited.value = value;
 					visited.put(target, newVisited);
 					queue.offer(target);
+				}
+				else
+				{
+					VisitedNode existing = visited.get(target);
+					if(existing.value > value)
+					{
+						existing.parent = current;
+						existing.value = value;
+					}
 				}
 			}
 		}
@@ -61,12 +70,16 @@ public class BFSSearcher implements SearchAlgorithm
 			current = visited.get(current.parent);
 		}
 		Collections.reverse(path.getVertexes());
+		
+		System.out.println("Dij: "+path.getVertexes());
+		System.out.println("Dij: "+path.getSteps());
+		
 		return path;
 	}
 
 	public String toString()
 	{
-		return "Breadth First Search";
+		return "Dijkstra Search";
 	}
 
 	private static class VisitedNode
