@@ -1,9 +1,8 @@
 package aufgabe1;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import aufgabe1.gui.ShowMatrixT;
 import org.jgrapht.Graph;
-import org.jgrapht.util.PrefetchIterator.NextElementFunctor;
 
 public class FWSearcher implements SearchAlgorithm {
 	
@@ -183,7 +182,10 @@ public class FWSearcher implements SearchAlgorithm {
 		
 		System.out.println("FW: "+path.getVertexes());
 		System.out.println("FW: "+path.getSteps());
-		
+
+		ShowMatrixT show = new ShowMatrixT(this.getMatrixT());
+		show.setVisible(true);
+
 		return path;
 	}
 	
