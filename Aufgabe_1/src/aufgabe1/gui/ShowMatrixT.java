@@ -1,14 +1,10 @@
 package aufgabe1.gui;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.util.ArrayList;
-
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
+import java.awt.*;
+import java.util.ArrayList;
 
 public class ShowMatrixT extends JFrame{
 
@@ -19,7 +15,7 @@ public class ShowMatrixT extends JFrame{
 		setTitle("T-Matrix:");
 		//To set Layout to null, free positioning of Buttons etc.
 		setLayout(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		//Filling 
 	    int size = matrix.get(0).size();
