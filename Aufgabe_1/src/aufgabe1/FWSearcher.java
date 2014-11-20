@@ -1,7 +1,9 @@
 package aufgabe1;
 
 import java.util.ArrayList;
-import aufgabe1.gui.ShowMatrixT;
+import java.util.Collections;
+import java.util.List;
+
 import org.jgrapht.Graph;
 
 public class FWSearcher implements SearchAlgorithm {
@@ -148,45 +150,53 @@ public class FWSearcher implements SearchAlgorithm {
 		System.out.println("Path: "+path_temp);
 		System.out.println("--------------");
 		
-		//Break Condition for the while-loop
-		boolean vertexWasAdded = true;
-		
-		while(vertexWasAdded==true){
-			vertexWasAdded=false;
-			//i.e. path_temp = [v1, v4, v6] -> check (v1,v4) and (v4,v6)
-			for(int index = 0; index < path_temp.size()-1; index++){  //-1 because the last vertex is at the right position
-				int temp_int = matrixT.get(vertices.indexOf(path_temp.get(index))).get(vertices.indexOf(path_temp.get(index+1)));
-				if(temp_int != -1){
-					String vertexFound = vertices.get(temp_int);
-					System.out.println("check("+path_temp.get(index)+","+path_temp.get(index+1)+")");
-					System.out.println("Another vertex was found: "+vertexFound);
-					System.out.println("--------------");
-					path_temp.add(index+1, vertexFound);
-					System.out.println("Path: "+path_temp);
-					System.out.println("--------------");
-					vertexWasAdded = true;
-				}
-				else{
-					System.out.println("check("+path_temp.get(index)+","+path_temp.get(index+1)+")");
-					System.out.println("No vertex was found in T-Matrix");
-					System.out.println("--------------");
-				}
-			}
-			
-		}
+		//buildPath method
+		List<String> endList = buildPath(path_temp);
 		
 		printD(matrixD);
 		printT(matrixT);
 		
-		path.setVertexes(path_temp);
+		path.setVertexes(endList);
 		
 		System.out.println("FW: "+path.getVertexes());
+		System.out.println("FW: "+path.getSteps()+" Accesses needed");
+		
 		System.out.println("FW: "+path.getSteps());
 
 		ShowMatrixT show = new ShowMatrixT(this.getMatrixT());
 		show.setVisible(true);
 
 		return path;
+	}
+	
+	//building the Path, checking recursive
+	public List<String> buildPath(List<String> inList){
+		int first = vertices.indexOf(inList.get(0));
+		int last = vertices.indexOf(inList.get(1));
+		int check = matrixT.get(first).get(last);
+		if(check == -1){
+			//Break Condition
+			return inList;
+		}
+		else{
+			List<String> newList1 = new ArrayList<>();
+			newList1.add(vertices.get(first));
+			newList1.add(vertices.get(check));
+			
+			List<String> newList2 = new ArrayList<>();
+			newList2.add(vertices.get(check));
+			newList2.add(vertices.get(last));
+			
+			return concat(buildPath(newList1),buildPath(newList2));
+		}
+	}
+	
+	public List<String> concat(List<String> inList1, List<String> inList2){
+		//get size for removing later the doubled Vertex
+		int size = inList1.size();
+		inList1.addAll(inList2);
+		inList1.remove(size);
+		return inList1;
 	}
 	
 	//Print matrix D
