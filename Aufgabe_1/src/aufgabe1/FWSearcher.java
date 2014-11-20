@@ -1,9 +1,8 @@
 package aufgabe1;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
+import aufgabe1.gui.ShowMatrixT;
 import org.jgrapht.Graph;
 
 public class FWSearcher implements SearchAlgorithm {
@@ -160,8 +159,6 @@ public class FWSearcher implements SearchAlgorithm {
 		
 		System.out.println("FW: "+path.getVertexes());
 		System.out.println("FW: "+path.getSteps()+" Accesses needed");
-		
-		System.out.println("FW: "+path.getSteps());
 
 		ShowMatrixT show = new ShowMatrixT(this.getMatrixT());
 		show.setVisible(true);
