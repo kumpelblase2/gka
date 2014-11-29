@@ -1,12 +1,12 @@
 package aufgabe1;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Path
 {
 	private int m_steps = 0;
-	private List<String> m_vertexes;
+	private List<List<String>> m_vertexes = new ArrayList<>();
+	private final Iterator<List<String>> m_iterator = m_vertexes.iterator();
 	
 	public int getSteps() {
 		return m_steps;
@@ -15,19 +15,19 @@ public class Path
 	public void setSteps(int m_steps) {
 		this.m_steps = m_steps;
 	}
-	
-	public List<String> getVertexes() {
-		return m_vertexes;
+
+	public void addAlternative(List<String> inAlternative)
+	{
+		this.m_vertexes.add(inAlternative);
 	}
 	
-	public void setVertexes(List<String> m_vertexes) {
-		this.m_vertexes = m_vertexes;
+	public List<String> next()
+	{
+		return this.m_iterator.next();
 	}
-	
-	public Path() {
-		super();
-		this.m_vertexes = new ArrayList<>();
+
+	public boolean hasMore()
+	{
+		return this.m_iterator.hasNext();
 	}
-	
-	
 }
