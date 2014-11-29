@@ -19,8 +19,6 @@ public class BIG_with_100_Vertices {
     Graph<String, WeightedNamedEdge> big = GraphParser.parse(file);
     private List<String> listBig = new ArrayList<String>();
     private List<String> listBig2 = new ArrayList<String>();
-    private Path resultPathBig = new Path();
-    private Path resultPathBig2 = new Path();
     
     /*
 	GeneratorProperties prop = new GeneratorProperties(6000, 6000, 100, 100, true);
@@ -35,24 +33,19 @@ public class BIG_with_100_Vertices {
 		listBig.add("v55");
 		listBig.add("v59");
 		listBig.add("v69");
-		
-		resultPathBig.setVertexes(listBig);
-		
-		
+
 		listBig2.add("v50");
 		listBig2.add("v2");
 		listBig2.add("v8");
 		listBig2.add("v5");
-		
-		resultPathBig2.setVertexes(listBig2);
 		
 	}
 
 	//FW
 	@Test
 	public void testShortestWayBIG() {
-		Assert.assertEquals(resultPathBig.getVertexes(),(searchFW.search(big, "v6", "v69")).getVertexes());
-		Assert.assertEquals(resultPathBig2.getVertexes(),(searchFW2.search(big, "v50", "v5")).getVertexes());
+		Assert.assertEquals(listBig,(searchFW.search(big, "v6", "v69")).next());
+		Assert.assertEquals(listBig2,(searchFW2.search(big, "v50", "v5")).next());
 	}
 	
 	//Dij

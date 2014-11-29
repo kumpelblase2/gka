@@ -54,29 +54,29 @@ public class DijkstraSearcherTest
 	public void testSuccess()
 	{
 		// Pr�ft ob ein Weg mit dem Parser gefunden wurde.
-		Assert.assertTrue(search.search(graph, "a", "c").getVertexes().size() > 0);
-		Assert.assertTrue(search.search(graph, "a", "b").getVertexes().size() > 0);
-		Assert.assertTrue(search.search(graph, "c", "b").getVertexes().size() > 0);
-		Assert.assertTrue(search.search(graph, "a", "d").getVertexes().size() > 0);
+		Assert.assertTrue(search.search(graph, "a", "c").hasMore());
+		Assert.assertTrue(search.search(graph, "a", "b").hasMore());
+		Assert.assertTrue(search.search(graph, "c", "b").hasMore());
+		Assert.assertTrue(search.search(graph, "a", "d").hasMore());
 	}
 
 	@Test
 	public void testFail()
 	{
 		// Pr�ft, dass keine Weg gefunden wurde, auch wenn im Ungerichteten Graphen ein Weg vorliegt.
-		Assert.assertEquals(search.search(graph, "c", "a").getVertexes().size(), 0);
-		Assert.assertEquals(search.search(graph, "b", "a").getVertexes().size(), 0);
-		Assert.assertEquals(search.search(graph, "b", "c").getVertexes().size(), 0);
-		Assert.assertEquals(search.search(graph, "d", "a").getVertexes().size(), 0);
+		Assert.assertFalse(search.search(graph, "c", "a").hasMore());
+		Assert.assertFalse(search.search(graph, "b", "a").hasMore());
+		Assert.assertFalse(search.search(graph, "b", "c").hasMore());
+		Assert.assertFalse(search.search(graph, "d", "a").hasMore());
 
 		// Pr�ft, dass kein Weg gefunden wurde, wenn keine Verbindung besteht.
-		Assert.assertEquals(search.search(graph3, "a", "c").getVertexes().size(), 0);
+		Assert.assertFalse(search.search(graph3, "a", "c").hasMore());
 	}
 
 	@Test
 	public void testBestPath()
 	{
 		// Pr�ft, dass der vom Wert her beste Weg gefunden wurde.
-		Assert.assertEquals(search.search(graph2, "a", "c").getVertexes().size(), 3);
+		Assert.assertEquals(search.search(graph2, "a", "c").next().size(), 3);
 	}
 }

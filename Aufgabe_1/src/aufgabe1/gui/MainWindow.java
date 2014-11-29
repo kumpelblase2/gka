@@ -1,10 +1,10 @@
 package aufgabe1.gui;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import javax.swing.*;
 import aufgabe1.*;
 import com.mxgraph.layout.mxCircleLayout;
 import com.mxgraph.model.mxCell;
@@ -140,13 +140,13 @@ public class MainWindow extends JFrame
 		this.resetColors();
 
 		Path pathResult = this.m_search.search(this.m_graph, this.m_startVertex, this.m_endVertex);
-		java.util.List<String> path = pathResult.getVertexes();
-		if(path.size() == 0)
+		if(!pathResult.hasMore())
 		{
 			JOptionPane.showMessageDialog(this, "Es wurde kein Pfad gefunden.", "Fehler", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
+		java.util.List<String> path = pathResult.next();
 		for(int i = 0; i < path.size(); i++)
 		{
 			String start = path.get(i);

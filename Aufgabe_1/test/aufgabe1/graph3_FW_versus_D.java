@@ -15,12 +15,10 @@ public class graph3_FW_versus_D {
 	File file = new File("./Aufgabe_1/resources/graph3.gka");
 	Graph<String, WeightedNamedEdge> graph3 = GraphParser.parse(file);
 	private List<String> listGraph3 = new ArrayList<String>();
-	private Path resultPathGraph3 = new Path();
 	
 	//Result Graph
 	private final Graph<String, WeightedNamedEdge> resultGraph = new DefaultDirectedGraph<>(WeightedNamedEdge.class);
 	private List<String> list = new ArrayList<String>();
-    private Path resultPath = new Path();
     private int stepsFW = 101;
     private int stepsD = 9;
 
@@ -104,26 +102,21 @@ public class graph3_FW_versus_D {
 		list.add("v9");
 		list.add("v7");
 		
-		resultPath.setVertexes(list);
-		
 		//graph3
 		listGraph3.add("Hamburg");
 		listGraph3.add("Bremen");
 		listGraph3.add("Cuxhaven");
-		
-		resultPathGraph3.setVertexes(listGraph3);
-		
 	}
 	@Test
 	public void testShortestWay() {
-		Assert.assertEquals(resultPath.getVertexes(),(searchFW.search(resultGraph, "v1", "v7")).getVertexes()); // [v1, v2, v3, v4, v8, v9, v7]
-		Assert.assertEquals(resultPath.getVertexes(),(searchD.search(resultGraph, "v1", "v7")).getVertexes()); // [v1, v2, v3, v4, v8, v9, v7]
+		Assert.assertEquals(list,(searchFW.search(resultGraph, "v1", "v7")).next()); // [v1, v2, v3, v4, v8, v9, v7]
+		Assert.assertEquals(list,(searchD.search(resultGraph, "v1", "v7")).next()); // [v1, v2, v3, v4, v8, v9, v7]
 	}
 	
 	@Test
 	public void testShortestWayGraph3() {
-		Assert.assertEquals(resultPathGraph3.getVertexes(),(searchFW.search(graph3, "Hamburg", "Cuxhaven")).getVertexes()); // FW: [Hamburg, Bremen, Cuxhaven] - 485 Zugriffe
-		Assert.assertEquals(resultPathGraph3.getVertexes(),(searchD.search(graph3, "Hamburg", "Cuxhaven")).getVertexes()); //
+		Assert.assertEquals(listGraph3,(searchFW.search(graph3, "Hamburg", "Cuxhaven")).next()); // FW: [Hamburg, Bremen, Cuxhaven] - 485 Zugriffe
+		Assert.assertEquals(listGraph3,(searchD.search(graph3, "Hamburg", "Cuxhaven")).next()); //
 	}
 	
 	

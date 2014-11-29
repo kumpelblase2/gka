@@ -18,8 +18,6 @@ public class BIG_FW_versus_D {
     Graph<String, WeightedNamedEdge> big = GraphParser.parse(file);
     private List<String> listBig = new ArrayList<String>();
     private List<String> listBig2 = new ArrayList<String>();
-    private Path resultPathBig = new Path();
-    private Path resultPathBig2 = new Path();
     
     /*
 	GeneratorProperties prop = new GeneratorProperties(6000, 6000, 100, 100, true);
@@ -36,25 +34,21 @@ public class BIG_FW_versus_D {
 		listBig.add("v45");
 		listBig.add("v26");
 		
-		resultPathBig.setVertexes(listBig);
-		
 		listBig2.add("v6");
 		listBig2.add("v32");
 		listBig2.add("v70");
-		
-		resultPathBig2.setVertexes(listBig2);
 	}
 
 	@Test
 	public void testShortestWayBIG_1() {
-		Assert.assertEquals(resultPathBig.getVertexes(),(searchFW.search(big, "v3", "v26")).getVertexes()); // FW: [v3, v78, v45, v26] - 11026 Zugriffe
-		Assert.assertEquals(resultPathBig.getVertexes(),(searchD.search(big, "v3", "v26")).getVertexes()); // Dij: [v3, v78, v45, v26] - 105 Zugriffe
+		Assert.assertEquals(listBig,(searchFW.search(big, "v3", "v26")).next()); // FW: [v3, v78, v45, v26] - 11026 Zugriffe
+		Assert.assertEquals(listBig,(searchD.search(big, "v3", "v26")).next()); // Dij: [v3, v78, v45, v26] - 105 Zugriffe
 	}
 	
 	@Test
 	public void testShortestWayBIG_2() {
-		Assert.assertEquals(resultPathBig2.getVertexes(),(searchFW.search(big, "v6", "v70")).getVertexes()); // FW: [v6, v32, v70] - 11026 Zugriffe
-		Assert.assertEquals(resultPathBig2.getVertexes(),(searchD.search(big, "v6", "v70")).getVertexes()); // Dij: [v6, v32, v70] - 105 Zugriffe
+		Assert.assertEquals(listBig2,(searchFW.search(big, "v6", "v70")).next()); // FW: [v6, v32, v70] - 11026 Zugriffe
+		Assert.assertEquals(listBig2,(searchD.search(big, "v6", "v70")).next()); // Dij: [v6, v32, v70] - 105 Zugriffe
 	}
 
 }

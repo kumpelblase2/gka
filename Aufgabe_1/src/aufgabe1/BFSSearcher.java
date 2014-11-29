@@ -55,12 +55,14 @@ public class BFSSearcher implements SearchAlgorithm
 			return path;
 
 		VisitedNode current = visited.get(inEnd);
+		List<String> pathNodes = new ArrayList<>();
 		while(current != null)
 		{
-			path.getVertexes().add(current.name);
+			pathNodes.add(current.name);
 			current = visited.get(current.parent);
 		}
-		Collections.reverse(path.getVertexes());
+		Collections.reverse(pathNodes);
+		path.addAlternative(pathNodes);
 		return path;
 	}
 

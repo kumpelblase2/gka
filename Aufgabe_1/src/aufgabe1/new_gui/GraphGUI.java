@@ -95,13 +95,13 @@ public class GraphGUI
 		this.resetColors();
 
 		Path pathResult = this.m_searchAlgorithm.search(this.m_currentGraph, this.m_start, this.m_end);
-		List<String> path = pathResult.getVertexes();
-		if(path.size() == 0)
+		if(!pathResult.hasMore())
 		{
 			JOptionPane.showMessageDialog(this.m_frame, "Es wurde kein Pfad gefunden.", "Fehler", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
+		List<String> path = pathResult.next();
 		for(int i = 0; i < path.size(); i++)
 		{
 			String start = path.get(i);

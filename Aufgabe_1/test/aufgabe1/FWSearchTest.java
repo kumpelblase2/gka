@@ -16,14 +16,13 @@ public class FWSearchTest
 	final FWSearcher search = new FWSearcher();
 	
 	private final Graph<String, WeightedNamedEdge> resultGraph = new DefaultDirectedGraph<>(WeightedNamedEdge.class);
-	private List<String> list = new ArrayList<String>();
-    private Path resultPath = new Path();
+	private List<String> list = new ArrayList<>();
 
 	@Before
 	public void setup()
 	{
 
-		graph2 = new DefaultDirectedGraph<String, WeightedNamedEdge>(WeightedNamedEdge.class);
+		graph2 = new DefaultDirectedGraph<>(WeightedNamedEdge.class);
 		graph2.addVertex("a");
 		graph2.addVertex("b");
 		graph2.addVertex("c");
@@ -80,9 +79,6 @@ public class FWSearchTest
 		list.add("v5");
 		list.add("v4");
 		list.add("v6");
-		
-		resultPath.setVertexes(list);
-
 	}
 	
 
@@ -90,20 +86,20 @@ public class FWSearchTest
 	public void testFail()
 	{
 		// Prueft, dass kein Weg gefunden wurde, gegen die "Einbahnstrasse"
-		Assert.assertEquals(search.search(resultGraph, "v3", "v1").getVertexes().size(), 0);
+		Assert.assertFalse(search.search(resultGraph, "v3", "v1").hasMore());
 	}
 
 	@Test
 	public void testBestPath()
 	{
 		// Prueft, dass vom Wert her beste Weg gefunden wurde.
-		Assert.assertEquals(search.search(graph2, "a", "c").getVertexes().size(), 3);
+		Assert.assertEquals(search.search(graph2, "a", "c").next().size(), 3);
 	}
 	
 	@Test
 	public void testBestPath_resultGraph() {
 		// Shortest Way
-		Assert.assertEquals(resultPath.getVertexes(),(search.search(resultGraph, "v1", "v6")).getVertexes());
+		Assert.assertEquals(list,(search.search(resultGraph, "v1", "v6")).next());
 
 	}
 	
@@ -111,6 +107,6 @@ public class FWSearchTest
 	public void testSuccess()
 	{
 		// Prueft ob ein Weg mit dem Parser gefunden wurde.
-		Assert.assertTrue(search.search(resultGraph, "v1", "v6").getVertexes().size() > 0);
+		Assert.assertTrue(search.search(resultGraph, "v1", "v6").hasMore());
 	}
 }

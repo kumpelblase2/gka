@@ -58,9 +58,9 @@ public class FWSearcher implements SearchAlgorithm {
 		printD(matrixD);
 		printT(matrixT);
 		
-		path.setVertexes(endList);
+		path.addAlternative(endList);
 		
-		System.out.println("FW: "+path.getVertexes());
+		System.out.println("FW: "+endList);
 		System.out.println("FW: "+path.getSteps()+" Accesses needed");
 
 		ShowMatrixT show = new ShowMatrixT(this.getMatrixT());
