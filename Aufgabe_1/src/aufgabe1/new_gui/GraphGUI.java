@@ -216,6 +216,7 @@ public class GraphGUI
 	public void loadGraph(Graph<String, WeightedNamedEdge> inGraph)
 	{
 		this.m_currentGraph = inGraph;
+		this.m_graphComponent.clearCellOverlays();
 		this.m_adapter = new JGraphXAdapter<>(inGraph);
 		this.m_graphComponent.setGraph(this.m_adapter);
 		mxCircleLayout layout = new mxCircleLayout(this.m_adapter);
