@@ -21,6 +21,8 @@ public class GenerateRandomDialog extends JDialog
 	private JCheckBox m_weighted;
 	private JSpinner m_weightMinAmount;
 	private JSpinner m_weightMaxAmount;
+	private JCheckBox m_network;
+	private JCheckBox m_directed;
 	private final GraphGUI m_gui;
 
 	public GenerateRandomDialog(GraphGUI inGUI)
@@ -88,7 +90,8 @@ public class GenerateRandomDialog extends JDialog
 		if(edgeMaxAmount < edgeMinAmount)
 			edgeMaxAmount = edgeMinAmount;
 
-		GeneratorProperties properties = new GeneratorProperties(edgeMinAmount, edgeMaxAmount, verticeMinAmount, verticeMaxAmount, true);
+		GeneratorProperties properties = new GeneratorProperties(edgeMinAmount, edgeMaxAmount, verticeMinAmount, verticeMaxAmount, this.m_directed.isSelected());
+		properties.network = this.m_network.isSelected();
 		if(this.m_weighted.isSelected())
 		{
 			properties.weighted = true;
@@ -140,7 +143,7 @@ public class GenerateRandomDialog extends JDialog
 		buttonCancel.setText("Cancel");
 		panel2.add(buttonCancel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		final JPanel panel3 = new JPanel();
-		panel3.setLayout(new GridLayoutManager(2, 8, new Insets(0, 0, 0, 0), -1, -1));
+		panel3.setLayout(new GridLayoutManager(3, 8, new Insets(0, 0, 0, 0), -1, -1));
 		contentPane.add(panel3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		final JPanel panel4 = new JPanel();
 		panel4.setLayout(new GridLayoutManager(1, 5, new Insets(0, 0, 0, 0), -1, -1));
@@ -182,6 +185,18 @@ public class GenerateRandomDialog extends JDialog
 		final JLabel label5 = new JLabel();
 		label5.setText("bis");
 		panel5.add(label5, new GridConstraints(0, 6, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		final JPanel panel6 = new JPanel();
+		panel6.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
+		panel3.add(panel6, new GridConstraints(2, 0, 1, 8, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+		m_network = new JCheckBox();
+		m_network.setText("Network");
+		panel6.add(m_network, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		final Spacer spacer3 = new Spacer();
+		panel6.add(spacer3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+		m_directed = new JCheckBox();
+		m_directed.setSelected(true);
+		m_directed.setText("Directed");
+		panel6.add(m_directed, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 	}
 
 	/**
