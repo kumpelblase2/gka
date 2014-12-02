@@ -9,6 +9,15 @@ public class WeightedNamedEdge extends DefaultEdge
 	private int m_weigth = Integer.MIN_VALUE;
 	private String m_name;
 	private final boolean m_directed;
+	
+	//NEU für Ford-Fulkerson-Algorithmus (Initialisierung)
+	private int currentFlow;
+	public int getCurrentFlow(){
+		return currentFlow;
+	}
+	public void setCurrentFlow(int inFlow){
+		currentFlow += inFlow;
+	}
 
 									//Start          Ende              gerichtet?
 	public WeightedNamedEdge(String inSource, String inTarget, boolean inDirected)
@@ -17,6 +26,8 @@ public class WeightedNamedEdge extends DefaultEdge
 		this.m_source = inSource;
 		this.m_target = inTarget;
 		this.m_directed = inDirected;
+		//NEU für Ford-Fulkerson-Algorithmus (Initialisierung)
+		this.currentFlow = 0;
 	}
 
 	public int getWeigth()
@@ -60,6 +71,7 @@ public class WeightedNamedEdge extends DefaultEdge
 	{
 		return this.m_weigth != Integer.MIN_VALUE;
 	}
+	
 	//toString()
 	public String toString()
 	{
@@ -72,6 +84,34 @@ public class WeightedNamedEdge extends DefaultEdge
 
 		return returnName;
 	}
+	
+	//toString() for FordFulkerson
+		public String toString2()
+		{
+			String returnName = "";
+			String isdirected = (isDirected() ? "-> " : "-- ");
+
+				returnName += getSource() + " " + isdirected;
+
+				returnName += getTarget();	
+				
+			if(hasWeigth())
+				returnName += " : " + getWeigth();
+			
+			if(hasCurrentFlow())
+				returnName += "("+currentFlow+")";
+			
+			return returnName;
+		}
+
+		private boolean hasCurrentFlow(){
+			if(currentFlow>=0){
+				return true;	
+			}
+			else{
+				return false;
+			}
+		}
 
 	@Override
 	public boolean equals(Object o)
