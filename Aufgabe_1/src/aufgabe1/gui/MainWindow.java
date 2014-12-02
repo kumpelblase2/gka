@@ -4,12 +4,16 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+
 import javax.swing.*;
+
 import aufgabe1.*;
+
 import com.mxgraph.layout.mxCircleLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxConstants;
+
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.ext.JGraphXAdapter;
@@ -24,7 +28,8 @@ public class MainWindow extends JFrame
 	private JButton m_runButton;
 	private String m_startVertex;
 	private String m_endVertex;
-	private SearchAlgorithm m_search = new BFSSearcher();
+	//private SearchAlgorithm m_search = new BFSSearcher();
+	private SearchAlgorithm m_search = new FordFulkerson();
 
 	public MainWindow(Graph<String, WeightedNamedEdge> inGraph)
 	{
