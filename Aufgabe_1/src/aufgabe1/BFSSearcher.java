@@ -65,7 +65,7 @@ public class BFSSearcher implements SearchAlgorithm
 					newVisited = visited.get(target);
 
 
-				newVisited.ancestors.add(new Ancestor(current, value));
+				boolean added = newVisited.ancestors.add(new Ancestor(current, value));
 				visited.put(target, newVisited);
 			}
 		}
@@ -122,7 +122,11 @@ public class BFSSearcher implements SearchAlgorithm
 			@Override
 			public int compare(final Ancestor o1, final Ancestor o2)
 			{
-				return o1.value - o2.value;
+				int firstResult = new Integer(o1.value).compareTo(o2.value);
+				if(firstResult != 0)
+					return firstResult;
+
+				return o1.name.compareTo(o2.name);
 			}
 		});
 	}
