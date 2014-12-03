@@ -1,13 +1,6 @@
 package aufgabe1;
 
-import aufgabe1.Path;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import org.jgrapht.Graph;
 
 public class EdmondsKarp implements SearchAlgorithm{
@@ -68,7 +61,7 @@ public class EdmondsKarp implements SearchAlgorithm{
 			boolean senkeWasMarked = true;
 			
 		//WHILE 1 START
-			//So lange ein vergroeßernder Fluss gefunden wird
+			//So lange ein vergroeï¿½ernder Fluss gefunden wird
 			System.out.println(pathList.getPathAmount());
 		while(pathList.hasMore()){
 			System.out.println("***START OF WHILE 1***");
@@ -96,28 +89,29 @@ public class EdmondsKarp implements SearchAlgorithm{
 				System.out.println("Edge: "+edge.toString2());
 				int possibleCapacity = edge.getWeigth();
 				//Condition: f < c
-					if(edge.getCurrentFlow() < possibleCapacity)
-						{	
-							//Create new MarkedVertex
-							MarkedVertex newMarked = new MarkedVertex();
-							//His own name = name of target
-							newMarked.name = currentNeighbor;
-							//Direction (true = plus)
-							newMarked.direction = true;
-						    //Vorgaenger is current
-							newMarked.vorgaenger = currentVertex;
-							//set possible Inkrement                                             =Vorgaenger (am Anfang INFINITY)                        
-							int minimum = Math.min((possibleCapacity-edge.getCurrentFlow()), node.currentInkrement);
-							newMarked.currentInkrement = minimum;
-							mapOfmarkedVertices.put(currentNeighbor, newMarked);
+				if(edge.getCurrentFlow() < possibleCapacity)
+				{
+					//Create new MarkedVertex
+					MarkedVertex newMarked = new MarkedVertex();
+					//His own name = name of target
+					newMarked.name = currentNeighbor;
+					//Direction (true = plus)
+					newMarked.direction = true;
+				    //Vorgaenger is current
+					newMarked.vorgaenger = currentVertex;
+					//set possible Inkrement                                             =Vorgaenger (am Anfang INFINITY)
+					int minimum = Math.min((possibleCapacity-edge.getCurrentFlow()), node.currentInkrement);
+					newMarked.currentInkrement = minimum;
+					mapOfmarkedVertices.put(currentNeighbor, newMarked);
 
-							if(currentNeighbor.equals(Senke))
-							{
-								System.out.println("Senke erreicht");	
-								senkeWasMarked = true;
-							}
-							
-					   }
+					if(currentNeighbor.equals(Senke))
+					{
+						System.out.println("Senke erreicht");
+						senkeWasMarked = true;
+					}
+			    }
+				else
+					break;
 				
 				rounds++;
 				System.out.println("- - - - - - - - - - - -");
@@ -138,12 +132,12 @@ public class EdmondsKarp implements SearchAlgorithm{
 			}
 			Collections.reverse(path);
 			System.out.println(path);
-			//f um Inkrement erhöhen bzw. erniedrigen
+			//f um Inkrement erhï¿½hen bzw. erniedrigen
 			for(int i = 0; i < path.size()-1; i++){
 				//Set mit allen Kanten von jeweils zwei Knoten aus dem Path
 				Set<WeightedNamedEdge> mapOfEdges = inGraph.getAllEdges(path.get(i), path.get(i+1));
 				for(WeightedNamedEdge edge : mapOfEdges){
-					System.out.println("Kante vor Änderung: "+edge.toString2());
+					System.out.println("Kante vor ï¿½nderung: "+edge.toString2());
 					//Add Increment to current flow of the plus-directed edges
 					if(mapOfmarkedVertices.get(edge.getTarget()).direction==true){
 						edge.setCurrentFlow(mapOfmarkedVertices.get(Senke).currentInkrement);
@@ -153,7 +147,7 @@ public class EdmondsKarp implements SearchAlgorithm{
 						edge.setCurrentFlow(-(mapOfmarkedVertices.get(Senke).currentInkrement));
 					}
 					
-					System.out.println("Kante nach Änderung: "+edge.toString2());
+					System.out.println("Kante nach ï¿½nderung: "+edge.toString2());
 				}
 			}
 			
