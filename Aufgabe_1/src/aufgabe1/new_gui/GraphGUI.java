@@ -95,7 +95,8 @@ public class GraphGUI
 	private void doSearch()
 	{
 		this.resetColors();
-
+		this.m_graphComponent.getGraph().refresh();
+		this.m_graphComponent.refresh();
 		Path pathResult = this.m_searchAlgorithm.search(this.m_currentGraph, this.m_start, this.m_end);
 		if(!pathResult.hasMore())
 		{
@@ -116,7 +117,6 @@ public class GraphGUI
 		}
 
 		this.m_graphAccessesLabel.setText(pathResult.getSteps() + "");
-
 		JOptionPane.showMessageDialog(this.m_frame, "Path found with " + (path.size() - 1) + " edge(s).", "Path found", JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -139,6 +139,7 @@ public class GraphGUI
 	{
 		this.m_graphComponent.getGraph().setCellStyles(mxConstants.STYLE_STROKECOLOR, "#6495ED", this.m_graphComponent.getGraph().getChildEdges(this.m_graphComponent.getGraph().getDefaultParent()));
 		this.m_graphComponent.getGraph().setCellStyles(mxConstants.STYLE_STROKECOLOR, "#6495ED", this.m_graphComponent.getGraph().getChildVertices(this.m_graphComponent.getGraph().getDefaultParent()));
+		this.m_graphComponent.getGraph().refresh();
 	}
 
 	private void createUIComponents()
