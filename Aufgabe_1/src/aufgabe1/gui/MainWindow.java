@@ -29,7 +29,7 @@ public class MainWindow extends JFrame
 	private String m_startVertex;
 	private String m_endVertex;
 	//private SearchAlgorithm m_search = new BFSSearcher();
-	private SearchAlgorithm m_search = new FordFulkerson();
+	private SearchAlgorithm m_search = new EdmondsKarp();
 
 	public MainWindow(Graph<String, WeightedNamedEdge> inGraph)
 	{
