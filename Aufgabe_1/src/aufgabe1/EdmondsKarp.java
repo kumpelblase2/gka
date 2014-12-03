@@ -21,6 +21,11 @@ public class EdmondsKarp implements SearchAlgorithm{
 		return flow;
 	}
 
+	public String toString()
+	{
+		return "Edmonds-Karp";
+	}
+
 	public Path search(Graph<String, WeightedNamedEdge> inGraph, String inStart, String inEnd)
 	{
 
