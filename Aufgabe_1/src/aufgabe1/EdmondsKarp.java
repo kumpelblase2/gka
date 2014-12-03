@@ -11,6 +11,10 @@ public class EdmondsKarp implements SearchAlgorithm{
 		public int max;
 		//total flow at the end
 		public int flow;
+		//Get flow
+		public int getFlow(){
+			return flow;
+		}
 		//length of listOfVerticesForInspection
 		public int length;
 		//Senke
