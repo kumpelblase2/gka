@@ -78,6 +78,7 @@ public class GraphGUI
 		this.m_searchSelection.addItem(new DijkstraSearcher());
 		this.m_searchSelection.addItem(new FWSearcher());
 		this.m_searchSelection.addItem(new FordFulkerson());
+		this.m_searchSelection.addItem(new EdmondsKarp());
 
 		this.m_searchSelection.addItemListener(new ItemListener()
 		{
