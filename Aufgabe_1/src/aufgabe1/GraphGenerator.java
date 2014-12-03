@@ -121,6 +121,22 @@ public class GraphGenerator
 				edgeCount--;
 			}
 		}
+
+		for(; edgeCount > 0; edgeCount--)
+		{
+			int first;
+			int second;
+
+			do
+			{
+				first = random(r, 0, remainingVertexes - 1);
+				second = random(r, 0, remainingVertexes - 1);
+			} while(first == second || inGen.containsEdge("v" + first, "v" + second));
+
+			WeightedNamedEdge edge = new WeightedNamedEdge("v" + first, "v" + second, true);
+			edge.setWeigth(random(r, inProperties.minWeight, inProperties.maxWeight));
+			inGen.addEdge("v" + first, "v" + second, edge);
+		}
 	}
 
 	private static int random(Random inRandom, int min, int max)
