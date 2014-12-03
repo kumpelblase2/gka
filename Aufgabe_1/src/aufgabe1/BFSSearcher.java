@@ -28,6 +28,7 @@ public class BFSSearcher implements SearchAlgorithm
 			for(WeightedNamedEdge edge : inGraph.edgesOf(current))
 			{
 				String target = edge.getTarget();
+
 				if(target.equals(current))
 				{
 					if(inGraph instanceof DirectedGraph)
@@ -36,7 +37,20 @@ public class BFSSearcher implements SearchAlgorithm
 					target = edge.getSource();
 				}
 
-				if(target.equals(inStart))
+				//if(target.equals(inStart))
+				//	continue;
+
+				boolean isAncestor = false;
+				for(Ancestor ancestor : node.ancestors)
+				{
+					if(ancestor.name.equals(target))
+					{
+						isAncestor = true;
+						break;
+					}
+				}
+
+				if(isAncestor)
 					continue;
 
 				int value = (node.ancestors == null || node.ancestors.size() == 0 ? 0 : node.ancestors.first().value + 1);
@@ -50,6 +64,7 @@ public class BFSSearcher implements SearchAlgorithm
 				else
 					newVisited = visited.get(target);
 
+
 				newVisited.ancestors.add(new Ancestor(current, value));
 				visited.put(target, newVisited);
 			}
@@ -58,7 +73,7 @@ public class BFSSearcher implements SearchAlgorithm
 		if(!visited.containsKey(inEnd))
 			return path;
 
-		List<List<String>> result = createPaths(inEnd, visited);
+		List<List<String>> result = createPaths(inEnd, inStart, visited, new ArrayList<String>());
 		Iterator<List<String>> iterator = result.iterator();
 		while(iterator.hasNext())
 		{
@@ -69,31 +84,29 @@ public class BFSSearcher implements SearchAlgorithm
 		return path;
 	}
 
-	private List<List<String>> createPaths(String inEnd, Map<String, VisitedNode> inData)
+	private List<List<String>> createPaths(String inEnd, String inStart, Map<String, VisitedNode> inData, List<String> inAcc)
 	{
 		VisitedNode current = inData.get(inEnd);
-		List<List<String>> path = new ArrayList<>();
-		if(current.ancestors == null || current.ancestors.size() == 0)
+		if(inEnd.equals(inStart))
 		{
-			List<String> ownPath = new ArrayList<>();
-			ownPath.add(current.name);
-			path.add(ownPath);
-			return path;
+			inAcc.add(inEnd);
+			List<List<String>> paths = new ArrayList<>();
+			paths.add(inAcc);
+			return paths;
 		}
 
-		Iterator<Ancestor> ancestors = current.ancestors.iterator();
-		while(ancestors.hasNext())
+		inAcc.add(inEnd);
+		List<List<String>> results = new ArrayList<>();
+		for(Ancestor ancestor : current.ancestors)
 		{
-			Ancestor next = ancestors.next();
-			List<List<String>> beforePaths = createPaths(next.name, inData);
-			for(List<String> subPath : beforePaths)
-			{
-				subPath.add(current.name);
-				path.add(subPath);
-			}
+			if(inAcc.contains(ancestor.name))
+				continue;
+
+			List<List<String>> result = createPaths(ancestor.name, inStart, inData, new ArrayList<>(inAcc));
+			results.addAll(result);
 		}
 
-		return path;
+		return results;
 	}
 
 	public String toString()
