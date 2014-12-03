@@ -18,8 +18,6 @@ public class BFSSearcher implements SearchAlgorithm
 		Map<String, VisitedNode> visited = new HashMap<>();
 		VisitedNode startVisited = new VisitedNode();
 		startVisited.name = inStart;
-		startVisited.parent = null;
-		startVisited.value = 0;
 		visited.put(inStart, startVisited);
 		queue.offer(inStart);
 		while(!queue.isEmpty())
@@ -30,6 +28,7 @@ public class BFSSearcher implements SearchAlgorithm
 			for(WeightedNamedEdge edge : inGraph.edgesOf(current))
 			{
 				String target = edge.getTarget();
+
 				if(target.equals(current))
 				{
 					if(inGraph instanceof DirectedGraph)
@@ -38,32 +37,76 @@ public class BFSSearcher implements SearchAlgorithm
 					target = edge.getSource();
 				}
 
-				int value = node.value + 1;
+				//if(target.equals(inStart))
+				//	continue;
+
+				boolean isAncestor = false;
+				for(Ancestor ancestor : node.ancestors)
+				{
+					if(ancestor.name.equals(target))
+					{
+						isAncestor = true;
+						break;
+					}
+				}
+
+				if(isAncestor)
+					continue;
+
+				int value = (node.ancestors == null || node.ancestors.size() == 0 ? 0 : node.ancestors.first().value + 1);
+				VisitedNode newVisited;
 				if(!visited.containsKey(target))
 				{
-					VisitedNode newVisited = new VisitedNode();
+					newVisited = new VisitedNode();
 					newVisited.name = target;
-					newVisited.parent = current;
-					newVisited.value = value;
-					visited.put(target, newVisited);
 					queue.offer(target);
 				}
+				else
+					newVisited = visited.get(target);
+
+
+				newVisited.ancestors.add(new Ancestor(current, value));
+				visited.put(target, newVisited);
 			}
 		}
 
 		if(!visited.containsKey(inEnd))
 			return path;
 
-		VisitedNode current = visited.get(inEnd);
-		List<String> pathNodes = new ArrayList<>();
-		while(current != null)
+		List<List<String>> result = createPaths(inEnd, inStart, visited, new ArrayList<String>());
+		Iterator<List<String>> iterator = result.iterator();
+		while(iterator.hasNext())
 		{
-			pathNodes.add(current.name);
-			current = visited.get(current.parent);
+			List<String> onePath = iterator.next();
+			Collections.reverse(onePath);
+			path.addAlternative(onePath);
 		}
-		Collections.reverse(pathNodes);
-		path.addAlternative(pathNodes);
 		return path;
+	}
+
+	private List<List<String>> createPaths(String inEnd, String inStart, Map<String, VisitedNode> inData, List<String> inAcc)
+	{
+		VisitedNode current = inData.get(inEnd);
+		if(inEnd.equals(inStart))
+		{
+			inAcc.add(inEnd);
+			List<List<String>> paths = new ArrayList<>();
+			paths.add(inAcc);
+			return paths;
+		}
+
+		inAcc.add(inEnd);
+		List<List<String>> results = new ArrayList<>();
+		for(Ancestor ancestor : current.ancestors)
+		{
+			if(inAcc.contains(ancestor.name))
+				continue;
+
+			List<List<String>> result = createPaths(ancestor.name, inStart, inData, new ArrayList<>(inAcc));
+			results.addAll(result);
+		}
+
+		return results;
 	}
 
 	public String toString()
@@ -74,7 +117,44 @@ public class BFSSearcher implements SearchAlgorithm
 	private static class VisitedNode
 	{
 		public String name;
+		public TreeSet<Ancestor> ancestors = new TreeSet<>(new Comparator<Ancestor>()
+		{
+			@Override
+			public int compare(final Ancestor o1, final Ancestor o2)
+			{
+				return o1.value - o2.value;
+			}
+		});
+	}
+
+	private static class Ancestor
+	{
+		public String name;
 		public int value;
-		public String parent;
+
+		public Ancestor(final String inName, final int inValue)
+		{
+			name = inName;
+			value = inValue;
+		}
+
+		@Override
+		public boolean equals(final Object o)
+		{
+			if(this == o)
+				return true;
+			if(o == null || getClass() != o.getClass())
+				return false;
+
+			Ancestor ancestor = (Ancestor)o;
+
+			return name.equals(ancestor.name);
+		}
+
+		@Override
+		public int hashCode()
+		{
+			return name.hashCode();
+		}
 	}
 }

@@ -7,7 +7,7 @@ public class Path
 	private int m_steps = 0;
 	private List<String> m_vertexes_fordFulkerson;
 	private List<List<String>> m_vertexes = new ArrayList<>();
-	private final Iterator<List<String>> m_iterator = m_vertexes.iterator();
+	private int index = 0;
 	
 	public int getSteps() {
 		return m_steps;
@@ -24,15 +24,20 @@ public class Path
 	
 	public List<String> next()
 	{
-		return this.m_iterator.next();
+		return this.m_vertexes.get(index++);
 	}
 
 	public boolean hasMore()
 	{
-		return this.m_iterator.hasNext();
+		return this.m_vertexes.size() > index;
+	}
+
+	public int getPathAmount()
+	{
+		return this.m_vertexes.size();
 	}
 	
-	//NEU für FordFulkerson
+	//NEU fï¿½r FordFulkerson
 	public List<String> getVertexes() {
 		return m_vertexes_fordFulkerson;
 	}
