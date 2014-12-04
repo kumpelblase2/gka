@@ -35,7 +35,7 @@ public class GraphGenerator
 
 		if(vertexCount > 0)
 		{
-			for(int i = 0; i < edgeCount; i++)
+			for(int i = 0; i <= edgeCount; i++)
 			{
 				String source = "v" + (r.nextInt(vertexCount) + 1);
 				String target = "v" + (r.nextInt(vertexCount) + 1);
@@ -122,7 +122,7 @@ public class GraphGenerator
 			}
 		}
 
-		for(; edgeCount > 0; edgeCount--)
+		for(; edgeCount >= 0; edgeCount--)
 		{
 			int first;
 			int second;
@@ -154,7 +154,7 @@ public class GraphGenerator
 		public boolean weighted;
 		public int minWeight;
 		public int maxWeight;
-		public boolean network;
+		public boolean network = false;
 
 		public GeneratorProperties(final int inMinEdges, final int inMaxEdges, final int inMinVertexes, final int inMaxVertexes, final boolean inDirected)
 		{
