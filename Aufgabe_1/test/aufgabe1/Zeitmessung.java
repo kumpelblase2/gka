@@ -51,7 +51,8 @@ public class Zeitmessung {
 		}	
 		else
 		{
-			System.out.println("Edmond is faster"+"("+(int)((((double)akkuEdmond)/((double)akkuFord))*100)+"%)");
+			double diff = akkuFord - akkuEdmond;
+			System.out.println("Edmond is faster"+"("+(int)((((double)diff)/((double)akkuFord))*100)+"%)");
 		}	
 			System.out.flush();
 	}
