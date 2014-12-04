@@ -1,17 +1,8 @@
 package aufgabe1;
-import static org.junit.Assert.*;
-
 import java.io.File;
-import java.util.Date;
-
 import org.jgrapht.Graph;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import aufgabe1.EdmondsKarp;
-import aufgabe1.FordFulkerson;
-import aufgabe1.GraphParser;
 
 
 public class Zeitmessung {
@@ -20,7 +11,7 @@ public class Zeitmessung {
 	
 	@BeforeClass
 	public static void setUp() throws Exception {
-		File file = new File("./resources/graph16(ford_fulk).gka");
+		File file = new File("./Aufgabe_1/resources/graph16(ford_fulk).gka");
 		graph = GraphParser.parse(file);
 	}
 

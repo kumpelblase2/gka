@@ -1,13 +1,10 @@
 package aufgabe1;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
-
 import org.jgrapht.Graph;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 public class FlowTest {
 
@@ -16,7 +13,7 @@ public class FlowTest {
 	
 	@BeforeClass
 	public static void setUp() throws Exception {
-		File file = new File("./resources/graph16(ford_fulk).gka");
+		File file = new File("./Aufgabe_1/resources/graph16(ford_fulk).gka");
 		Graph graph = GraphParser.parse(file);
 		FordFulkerson ford = new FordFulkerson();
 		ford.search(graph, "q", "s");
