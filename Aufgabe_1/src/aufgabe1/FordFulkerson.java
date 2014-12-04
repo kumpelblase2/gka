@@ -301,6 +301,7 @@ public class FordFulkerson implements SearchAlgorithm{
 			System.out.println("Actual flow is: "+flow);
 		}
 
+		path.addAlternative(new ArrayList<String>());
 		return path;
 	}
 

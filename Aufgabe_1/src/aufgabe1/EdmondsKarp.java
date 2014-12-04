@@ -197,6 +197,7 @@ public class EdmondsKarp implements SearchAlgorithm{
 		System.out.println("Max flow could be: "+max);
 		System.out.println("Actual flow is: "+flow);
 
+		path2.addAlternative(new ArrayList<String>());
 
 		return path2;
 	}
