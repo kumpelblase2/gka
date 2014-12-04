@@ -35,7 +35,7 @@ public class GraphGenerator
 
 		if(vertexCount > 0)
 		{
-			for(int i = 0; i <= edgeCount; i++)
+			for(int i = 0; i <= edgeCount || inGen.edgeSet().size() < inProperties.minEdges; i++)
 			{
 				String source = "v" + (r.nextInt(vertexCount) + 1);
 				String target = "v" + (r.nextInt(vertexCount) + 1);
@@ -106,23 +106,9 @@ public class GraphGenerator
 			toTarget.setWeigth(random(r, inProperties.minWeight, inProperties.maxWeight));
 			inGen.addEdge("v" + source, "v" + i, fromSource);
 			inGen.addEdge("v" + i, "v" + target, toTarget);
-
-			if(edgeCount > 0 && r.nextBoolean())
-			{
-				int nextTarget;
-				do
-				{
-					nextTarget = random(r, 0, remainingVertexes - 1);
-				} while(nextTarget == i);
-
-				WeightedNamedEdge edge = new WeightedNamedEdge("v" + i, "v" + nextTarget, true);
-				edge.setWeigth(random(r, inProperties.minWeight, inProperties.maxWeight));
-				inGen.addEdge("v" + i, "v" + nextTarget, edge);
-				edgeCount--;
-			}
 		}
 
-		for(; edgeCount >= 0; edgeCount--)
+		for(; edgeCount >= 0 || inGen.edgeSet().size() < inProperties.minEdges; edgeCount--)
 		{
 			int first;
 			int second;
