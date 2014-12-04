@@ -10,6 +10,9 @@ public class FlowTest {
 
 	static int fordFlow;
 	static int edmondFlow;
+
+	static int fordFlow2;
+	static int edmondFlow2;
 	
 	@BeforeClass
 	public static void setUp() throws Exception {
@@ -22,12 +25,22 @@ public class FlowTest {
 		EdmondsKarp edmond = new EdmondsKarp();
 		edmond.search(graph, "q", "s");
 		edmondFlow = edmond.getFlow();
+
+		file = new File("./Aufgabe_1/resources/graph15(ford_fulk).gka");
+		graph = GraphParser.parse(file);
+		edmond.search(graph, "q", "s");
+		edmondFlow2 = edmond.getFlow();
+		ford.search(graph, "q", "s");
+		fordFlow2 = ford.getFlow();
 	}
 
 	@Test
 	public void test() {
 		assertEquals(4, fordFlow);
 		assertEquals(4, edmondFlow);
+
+		assertEquals(13, edmondFlow2);
+		assertEquals(13, fordFlow2);
 	}
 
 }
