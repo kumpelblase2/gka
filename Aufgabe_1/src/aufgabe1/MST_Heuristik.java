@@ -65,6 +65,17 @@ public class MST_Heuristik implements SearchAlgorithm{
 		}
 		
 		// TODO Convert to "Eulerschen Graphen" #37
+		Graph<String, WeightedNamedEdge> graphEuler = new DefaultGraph();
+		for(WeightedNamedEdge edge : edgesOfMST){
+			//add edge
+			graphEuler.addEdge(edge.getSource(), edge.getTarget(), edge);
+			//clone edge
+			WeightedNamedEdge cloned = edge.clone();
+			cloned.setName(cloned.getName() != null ? cloned.getName() + "_" : "_");
+			//add cloned-edge
+			graphEuler.addEdge(edge.getSource(), edge.getTarget(), cloned);
+		}
+		
 		
 		
 		// TODO Fleury Algorithm #38
