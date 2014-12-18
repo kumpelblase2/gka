@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.jgrapht.Graph;
 
+import aufgabe1.gui.ShowMST;
+
 public class MST_Heuristik implements SearchAlgorithm{
 	
 	List<WeightedNamedEdge> edgesOfMST = new ArrayList<>();
@@ -18,7 +20,7 @@ public class MST_Heuristik implements SearchAlgorithm{
 		Path path = new Path();
 		
 		//return empty path, if inStart or inEnd are not in the Graph
-		if(!inGraph.containsVertex(inStart) || !inGraph.containsVertex(inEnd)){
+		if(!inGraph.containsVertex(inStart)){
 			return path;
 		}
 			
@@ -64,18 +66,26 @@ public class MST_Heuristik implements SearchAlgorithm{
 			System.out.println(edge.toString2());
 		}
 		
+		
 		// TODO Convert to "Eulerschen Graphen" #37
 		Graph<String, WeightedNamedEdge> graphEuler = new DefaultGraph();
 		for(WeightedNamedEdge edge : edgesOfMST){
-			//add edge
+			System.out.println("Source: "+edge.getSource()+" Target: "+ edge.getTarget()+" Edge: "+edge.toString2());
+			
+			//add vertices FIRST!!!
+			graphEuler.addVertex(edge.getSource());
+			graphEuler.addVertex(edge.getTarget());
+			
+			//add edge SECOND!!!
 			graphEuler.addEdge(edge.getSource(), edge.getTarget(), edge);
+			System.out.println("added");
 			//clone edge
 			WeightedNamedEdge cloned = edge.clone();
-			cloned.setName(cloned.getName() != null ? cloned.getName() + "_" : "_");
 			//add cloned-edge
 			graphEuler.addEdge(edge.getSource(), edge.getTarget(), cloned);
 		}
 		
+		ShowMST mst = new ShowMST(graphEuler);
 		
 		
 		// TODO Fleury Algorithm #38
@@ -83,7 +93,7 @@ public class MST_Heuristik implements SearchAlgorithm{
 
 		
 		
-		//returning Euler-Tour
+		//returning Euler-Tour (START and END same vertex!!!)
 		return path;
 			
 	}
