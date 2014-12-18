@@ -143,4 +143,13 @@ public class WeightedNamedEdge extends DefaultEdge
 		result = 31 * result + (m_directed ? 1 : 0);
 		return result;
 	}
+	
+	@Override
+	public WeightedNamedEdge clone()
+	{
+		WeightedNamedEdge cloned = new WeightedNamedEdge(this.getSource(), this.getTarget(), this.isDirected());
+		cloned.setWeigth(this.getWeigth());
+		cloned.setName(this.getName());
+		return null;
+	}
 }
