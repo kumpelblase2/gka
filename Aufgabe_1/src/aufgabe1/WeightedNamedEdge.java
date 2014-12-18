@@ -149,7 +149,14 @@ public class WeightedNamedEdge extends DefaultEdge
 	{
 		WeightedNamedEdge cloned = new WeightedNamedEdge(this.getSource(), this.getTarget(), this.isDirected());
 		cloned.setWeigth(this.getWeigth());
-		cloned.setName(this.getName());
-		return null;
+		
+		if(this.getName() != null){
+			cloned.setName(this.getName());
+		}
+		else{
+			cloned.setName("clone_of_:");
+		}
+		
+		return cloned;
 	}
 }
