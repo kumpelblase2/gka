@@ -1,9 +1,13 @@
 package aufgabe1;
 
+import aufgabe1.WeightedNamedEdge;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 
 import org.jgrapht.Graph;
 
@@ -70,30 +74,101 @@ public class MST_Heuristik implements SearchAlgorithm{
 		// TODO Convert to "Eulerschen Graphen" #37
 		Graph<String, WeightedNamedEdge> graphEuler = new DefaultGraph();
 		for(WeightedNamedEdge edge : edgesOfMST){
-			System.out.println("Source: "+edge.getSource()+" Target: "+ edge.getTarget()+" Edge: "+edge.toString2());
+			String source = edge.getSource();
+			String target = edge.getTarget();
+			System.out.println("Source: "+source+" Target: "+ target +" Edge: "+edge.toString2());
 			
 			//add vertices FIRST!!!
-			graphEuler.addVertex(edge.getSource());
-			graphEuler.addVertex(edge.getTarget());
+			graphEuler.addVertex(source);
+			graphEuler.addVertex(target);
 			
-			//add edge SECOND!!!
-			graphEuler.addEdge(edge.getSource(), edge.getTarget(), edge);
-			System.out.println("added");
-			//clone edge
-			WeightedNamedEdge cloned = edge.clone();
-			//add cloned-edge
-			graphEuler.addEdge(edge.getSource(), edge.getTarget(), cloned);
+			//add edges SECOND!!!
+			WeightedNamedEdge newEdge1 = new WeightedNamedEdge(source, target, true);
+			graphEuler.addEdge(source, target, newEdge1);
+			System.out.println("added newEdge1");
+			
+			WeightedNamedEdge newEdge2 = new WeightedNamedEdge(target, source, true);
+			graphEuler.addEdge(source, target, newEdge2);
+			System.out.println("added newEdge2");
+			
 		}
 		
-		ShowMST mst = new ShowMST(graphEuler);
+		//ShowMST mst = new ShowMST(graphEuler);
 		
 		
-		// TODO Fleury Algorithm #38
+		// TODO Generate Eulerkreis #38
+		
+		//Initializing some variables
+		int numberOfVerticesInGraph = inGraph.vertexSet().size();
+		String theStartEndVertex;
+		String theChosenOne;
+		Stack<String> stackOfVertices = new Stack<>();
+		List<String> verticesOfeulerKreis = new ArrayList<>();
+		List<String> eulerKreis = new ArrayList<>();
+		boolean unmarkedVertexWasFound;
+		
+		//chose one vertex of the Euler-graph to be the Start and End of the Circle
+		for(String vertex : graphEuler.vertexSet()){
+			verticesOfeulerKreis.add(vertex);	
+		}
+		
+		System.out.println(verticesOfeulerKreis);
+		theStartEndVertex = verticesOfeulerKreis.get(0);
 		
 
+		//push Start/End-vertex to the Stack
+		stackOfVertices.push(theStartEndVertex);
+
+		//add Start/End-vertex to the Euler-Kreis
+		eulerKreis.add(theStartEndVertex);
 		
 		
-		//returning Euler-Tour (START and END same vertex!!!)
+		//WHILE1 START (not all Vertices has been marked)
+		while(!stackOfVertices.isEmpty()){
+		
+			//look what is on top of the stack, take it for "theChosenOne"
+			theChosenOne = stackOfVertices.peek();
+			System.out.println("i took: "+theChosenOne);
+			
+			//set unmarkedVertexWasFound to false
+			unmarkedVertexWasFound = false;
+			
+			//WHILE2 START (edge with unmarked Vertex was found)
+			while(unmarkedVertexWasFound == false){
+				for(WeightedNamedEdge edge : graphEuler.edgesOf(theChosenOne)){
+					//the found target vertex was not marked yet
+					if((!eulerKreis.contains(edge.getTarget())) && (edge.getTarget() != theChosenOne)){
+						System.out.println("found new unmarked vertex: "+edge.getTarget());
+						eulerKreis.add(edge.getTarget());
+						stackOfVertices.add(edge.getTarget());
+						unmarkedVertexWasFound = true;
+					}
+				}
+				//no unmarked target vertex was found:
+				//remove theChosenOne from stack
+				String toBeRemoved = stackOfVertices.pop();
+				System.out.println("found NO unmarked, removing: "+ toBeRemoved);
+				unmarkedVertexWasFound = true;
+			}
+			//WHILE2 END
+			
+		}
+		//WHILE1 END
+		
+		//add Start/End Vertex to complete the Circle
+		eulerKreis.add(theStartEndVertex);
+		
+		//check if all vertices has been detected
+		if(graphEuler.vertexSet().size()==numberOfVerticesInGraph){
+			System.out.println("all detected");
+			//creating Path
+			path.setVertexes(eulerKreis);
+			//Show Euler-Kreis as a JDialog
+			//ShowMST eulerCircle = new ShowMST(createEulerCircle(eulerKreis));
+		}
+		
+		System.out.println("EulerKreis: "+eulerKreis);
+		//returning Euler-Kreis (START and END same vertex!!!)
 		return path;
 			
 	}
@@ -112,5 +187,20 @@ public class MST_Heuristik implements SearchAlgorithm{
 			insertEdge(inEdge, index);
 		}
 	}
+	
+	//method for creating Euler-Kreis as a graph
+	private Graph<String, WeightedNamedEdge> createEulerCircle(List<String> inList){
+		Graph<String, WeightedNamedEdge> eulerCircle = new DefaultGraph();
+		for(int i = 0; i < inList.size()-1; i++){
+			//add Vertices
+			eulerCircle.addVertex(inList.get(i));
+			eulerCircle.addVertex(inList.get(i+1));
+			//Create directed Edge
+			WeightedNamedEdge edge = new WeightedNamedEdge(inList.get(i), inList.get(i+1), true);
+			eulerCircle.addEdge(inList.get(i), inList.get(i+1), edge);
+		}
+		return eulerCircle;
+	}
+	
 
 }
