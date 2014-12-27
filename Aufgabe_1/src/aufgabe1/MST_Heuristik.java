@@ -65,10 +65,14 @@ public class MST_Heuristik implements SearchAlgorithm{
 			}
 		}
 		
-		System.out.println("***Printing MST-Edges***");
+		int weightOfAllEdgesMST = 0;
+		//System.out.println("***Printing MST-Edges***");
 		for(WeightedNamedEdge edge : edgesOfMST){
-			System.out.println(edge.toString2());
+			//System.out.println(edge.toString2());
+			weightOfAllEdgesMST = weightOfAllEdgesMST+edge.getWeigth();
 		}
+		//Print weight-of-all-edges of the 
+		System.out.println("Weight-Of-All-Edges-MST: "+weightOfAllEdgesMST);
 		
 		
 		// TODO Convert to "Eulerschen Graphen" #37
@@ -76,7 +80,7 @@ public class MST_Heuristik implements SearchAlgorithm{
 		for(WeightedNamedEdge edge : edgesOfMST){
 			String source = edge.getSource();
 			String target = edge.getTarget();
-			System.out.println("Source: "+source+" Target: "+ target +" Edge: "+edge.toString2());
+			//System.out.println("Source: "+source+" Target: "+ target +" Edge: "+edge.toString2());
 			
 			//add vertices FIRST!!!
 			graphEuler.addVertex(source);
@@ -84,16 +88,20 @@ public class MST_Heuristik implements SearchAlgorithm{
 			
 			//add edges SECOND!!!
 			WeightedNamedEdge newEdge1 = new WeightedNamedEdge(source, target, true);
+			newEdge1.setWeigth(edge.getWeigth());
 			graphEuler.addEdge(source, target, newEdge1);
-			System.out.println("added newEdge1");
+			//System.out.println("added: "+newEdge1.toString2());
 			
 			WeightedNamedEdge newEdge2 = new WeightedNamedEdge(target, source, true);
-			graphEuler.addEdge(source, target, newEdge2);
-			System.out.println("added newEdge2");
+			newEdge2.setWeigth(edge.getWeigth());
+			graphEuler.addEdge(target, source, newEdge2);
+			//System.out.println("added: "+newEdge2.toString2());
 			
 		}
 		
-		//ShowMST mst = new ShowMST(graphEuler);
+		//System.out.println("Anzahl der Kanten: "+graphEuler.edgeSet().size());
+		
+		ShowMST mst = new ShowMST(graphEuler); 
 		
 		
 		// TODO Generate Eulerkreis #38
@@ -113,7 +121,13 @@ public class MST_Heuristik implements SearchAlgorithm{
 		}
 		
 		System.out.println(verticesOfeulerKreis);
-		theStartEndVertex = verticesOfeulerKreis.get(0);
+		//THE TOTAL WEIGHT DEPENDS ON THE FIRST CHOSEN VERTEX!!! (Weight-in-total:)
+		theStartEndVertex = verticesOfeulerKreis.get(0);   //87 -> "c" was chosen first in JUnit Test Graph
+		//theStartEndVertex = verticesOfeulerKreis.get(1);   //68
+		//theStartEndVertex = verticesOfeulerKreis.get(2);   //66
+		//theStartEndVertex = verticesOfeulerKreis.get(3);   //67
+		//theStartEndVertex = verticesOfeulerKreis.get(4);   //77
+		//theStartEndVertex = verticesOfeulerKreis.get(5);   //55 -> "a" was chosen first in JUnit Test Graph
 		
 
 		//push Start/End-vertex to the Stack
@@ -128,7 +142,7 @@ public class MST_Heuristik implements SearchAlgorithm{
 		
 			//look what is on top of the stack, take it for "theChosenOne"
 			theChosenOne = stackOfVertices.peek();
-			System.out.println("i took: "+theChosenOne);
+			//System.out.println("I took: "+theChosenOne);
 			
 			//set unmarkedVertexWasFound to false
 			unmarkedVertexWasFound = false;
@@ -138,17 +152,19 @@ public class MST_Heuristik implements SearchAlgorithm{
 				for(WeightedNamedEdge edge : graphEuler.edgesOf(theChosenOne)){
 					//the found target vertex was not marked yet
 					if((!eulerKreis.contains(edge.getTarget())) && (edge.getTarget() != theChosenOne)){
-						System.out.println("found new unmarked vertex: "+edge.getTarget());
+						//System.out.println("found new unmarked vertex: "+edge.getTarget());
 						eulerKreis.add(edge.getTarget());
 						stackOfVertices.add(edge.getTarget());
 						unmarkedVertexWasFound = true;
 					}
 				}
+				if(unmarkedVertexWasFound == false){
 				//no unmarked target vertex was found:
 				//remove theChosenOne from stack
 				String toBeRemoved = stackOfVertices.pop();
-				System.out.println("found NO unmarked, removing: "+ toBeRemoved);
+				//System.out.println("found NO unmarked, removing: "+ toBeRemoved);
 				unmarkedVertexWasFound = true;
+				}
 			}
 			//WHILE2 END
 			
@@ -160,7 +176,7 @@ public class MST_Heuristik implements SearchAlgorithm{
 		
 		//check if all vertices has been detected
 		if(graphEuler.vertexSet().size()==numberOfVerticesInGraph){
-			System.out.println("all detected");
+			//System.out.println("all detected");
 			//creating Path
 			path.setVertexes(eulerKreis);
 			//Show Euler-Kreis as a JDialog
