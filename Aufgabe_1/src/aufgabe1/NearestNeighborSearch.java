@@ -10,6 +10,15 @@ public class NearestNeighborSearch implements SearchAlgorithm
 	public Path search(Graph<String, WeightedNamedEdge> inGraph, String inStart, String inEnd)
 	{
 		Path path = new Path();
+		if(inStart == null)
+		{
+			Iterator<String> it = inGraph.vertexSet().iterator();
+			for(int i = 0; i < new Random().nextInt(inGraph.vertexSet().size()) - 1; i++)
+				it.next();
+
+			inStart = it.next();
+		}
+
 		if(!inGraph.containsVertex(inStart) || !inGraph.containsVertex(inEnd))
 			return path;
 
@@ -44,6 +53,7 @@ public class NearestNeighborSearch implements SearchAlgorithm
 
 			visited.add(current);
 		}
+		visited.add(inStart);
 
 		path.addAlternative(visited);
 		return path;
