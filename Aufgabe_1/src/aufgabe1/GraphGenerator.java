@@ -7,6 +7,9 @@ import org.jgrapht.graph.DefaultDirectedGraph;
 
 public class GraphGenerator
 {
+	private static final int RETRIES = 3;
+	private static final int SKIPS = 6;
+
 	public static Graph<String, WeightedNamedEdge> generate(GeneratorProperties inProperties)
 	{
 		Graph<String, WeightedNamedEdge> gen;
@@ -35,15 +38,50 @@ public class GraphGenerator
 
 		if(vertexCount > 0)
 		{
-			for(int i = 0; i <= edgeCount || inGen.edgeSet().size() < inProperties.minEdges; i++)
+			int skips = SKIPS;
+
+			generateEdge:
+			for(int i = 0; i <= edgeCount || inGen.edgeSet().size() < inProperties.minEdges && skips > 0; i++)
 			{
 				String source = "v" + (r.nextInt(vertexCount) + 1);
 				String target = "v" + (r.nextInt(vertexCount) + 1);
 				WeightedNamedEdge edge = new WeightedNamedEdge(source, target, inProperties.directed);
 				if(inProperties.weighted)
-					edge.setWeigth(random(r, inProperties.minWeight, inProperties.maxWeight));
+				{
+					int weight = random(r, inProperties.minWeight, inProperties.maxWeight);
+					if(inProperties.metric)
+					{
+						for(WeightedNamedEdge secondary : inGen.edgesOf(source))
+						{
+							WeightedNamedEdge tertier = inGen.getEdge(secondary.getTarget(), target);
+							if(tertier != null)
+							{
+								System.out.println((tertier.getWeigth() + secondary.getWeigth()) + " VS " + weight);
+								int tries = RETRIES;
+								while(tertier.getWeigth() + secondary.getWeigth() < weight && tries > 0)
+								{
+									System.out.println("Had to readjust: " + source + ":" + target + "; previous: " + weight);
+									weight -= random(r, inProperties.minWeight - weight, inProperties.maxWeight - weight);
+									tries--;
+								}
+
+								if(tries == 0 && tertier.getWeigth() + secondary.getWeigth() < weight)
+								{
+									skips--;
+									continue generateEdge;
+								}
+							}
+						}
+					}
+					edge.setWeigth(weight);
+				}
 
 				inGen.addEdge(source, target, edge);
+			}
+
+			if(skips == 0)
+			{
+				throw new RuntimeException("Skipped too many edge generations due to failing to create a metric edge.");
 			}
 		}
 	}
@@ -141,6 +179,7 @@ public class GraphGenerator
 		public int minWeight;
 		public int maxWeight;
 		public boolean network = false;
+		public boolean metric = false;
 
 		public GeneratorProperties(final int inMinEdges, final int inMaxEdges, final int inMinVertexes, final int inMaxVertexes, final boolean inDirected)
 		{
