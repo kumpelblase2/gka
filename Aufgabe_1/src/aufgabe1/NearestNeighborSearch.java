@@ -69,6 +69,69 @@ public class NearestNeighborSearch implements SearchAlgorithm
 		return path;
 	}
 
+	public Path search2(Graph<String ,WeightedNamedEdge> inGraph, String inStart, String inEnd)
+	{
+		Path path = new Path();
+		if(inStart == null)
+		{
+			Iterator<String> it = inGraph.vertexSet().iterator();
+			for(int i = 0; i < new Random().nextInt(inGraph.vertexSet().size()) - 1; i++)
+				it.next();
+
+			inStart = it.next();
+		}
+
+		if(!inGraph.containsVertex(inStart))
+			return path;
+
+		List<String> currentPath = new ArrayList<>(inGraph.vertexSet().size() + 1);
+		currentPath.add(inStart);
+		currentPath.add(inStart);
+
+		for(String vertex : inGraph.vertexSet())
+		{
+			if(currentPath.contains(vertex))
+				continue;
+
+			int min = Integer.MAX_VALUE;
+			int index = -1;
+			for(int i = 1; i < currentPath.size() - 1; i++)
+			{
+				currentPath.add(i, vertex);
+				int length = getDistance(inGraph, currentPath);
+				if(length < min)
+				{
+					min = length;
+					index = i;
+				}
+				currentPath.remove(i);
+			}
+
+			currentPath.add(index, vertex);
+		}
+
+		path.addAlternative(currentPath);
+		return path;
+	}
+
+	private int getDistance(Graph<String, WeightedNamedEdge> inGraph, List<String> inDistance)
+	{
+		if(inDistance.size() <= 1)
+			return 0;
+
+		int length = 0;
+		String current = null;
+		String next = null;
+		for(int i = 0; i < inDistance.size() - 1; i++)
+		{
+			current = inDistance.get(i);
+			next = inDistance.get(i + 1);
+			length += inGraph.getEdge(current, next).getWeigth();
+		}
+
+		return length + inGraph.getEdge(next, inDistance.get(0)).getWeigth();
+	}
+
 	@Override
 	public String toString()
 	{
