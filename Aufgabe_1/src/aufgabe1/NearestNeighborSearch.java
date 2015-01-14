@@ -75,6 +75,7 @@ public class NearestNeighborSearch implements SearchAlgorithm
 		if(inStart == null)
 		{
 			Iterator<String> it = inGraph.vertexSet().iterator();
+			path.setSteps(path.getSteps() + 1);
 			for(int i = 0; i < new Random().nextInt(inGraph.vertexSet().size()) - 1; i++)
 				it.next();
 
@@ -98,7 +99,7 @@ public class NearestNeighborSearch implements SearchAlgorithm
 			for(int i = 1; i < currentPath.size(); i++)
 			{
 				currentPath.add(i, vertex);
-				int length = getDistance(inGraph, currentPath);
+				int length = getDistance(inGraph, currentPath, path);
 				if(length < min)
 				{
 					min = length;
@@ -114,7 +115,7 @@ public class NearestNeighborSearch implements SearchAlgorithm
 		return path;
 	}
 
-	private int getDistance(Graph<String, WeightedNamedEdge> inGraph, List<String> inDistance)
+	private int getDistance(Graph<String, WeightedNamedEdge> inGraph, List<String> inDistance, Path inPath)
 	{
 		if(inDistance.size() <= 1)
 			return 0;
@@ -126,16 +127,24 @@ public class NearestNeighborSearch implements SearchAlgorithm
 		{
 			current = inDistance.get(i);
 			next = inDistance.get(i + 1);
+			inPath.setSteps(inPath.getSteps() + 1);
 			WeightedNamedEdge edge = inGraph.getEdge(current, next);
 			if(edge == null)
+			{
+				inPath.setSteps(inPath.getSteps() + 1);
 				edge = inGraph.getEdge(next, current);
+			}
 
 			length += edge.getWeigth();
 		}
 
+		inPath.setSteps(inPath.getSteps() + 1);
 		WeightedNamedEdge edge = inGraph.getEdge(current, inDistance.get(0));
 		if(edge == null)
+		{
+			inPath.setSteps(inPath.getSteps() + 1);
 			edge = inGraph.getEdge(inDistance.get(0), current);
+		}
 		return length + edge.getWeigth();
 	}
 
