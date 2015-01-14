@@ -1,17 +1,8 @@
 package aufgabe1;
 
-import aufgabe1.WeightedNamedEdge;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
-
-import org.jgrapht.Graph;
-
+import java.util.*;
 import aufgabe1.gui.ShowMST;
+import org.jgrapht.Graph;
 
 public class MST_Heuristik implements SearchAlgorithm{
 	
@@ -106,7 +97,7 @@ public class MST_Heuristik implements SearchAlgorithm{
 		}
 		*/
 		
-		ShowMST mst = new ShowMST(graphEuler); 
+		ShowMST mst = new ShowMST(graphEuler);
 		
 		
 		// TODO Generate Eulerkreis #38
@@ -190,6 +181,7 @@ public class MST_Heuristik implements SearchAlgorithm{
 			//System.out.println("all detected");
 			//creating Path
 			path.setVertexes(eulerKreis);
+			path.addAlternative(eulerKreis);
 			//Show Euler-Kreis as a JDialog
 			//ShowMST eulerCircle = new ShowMST(createEulerCircle(eulerKreis));
 		}
