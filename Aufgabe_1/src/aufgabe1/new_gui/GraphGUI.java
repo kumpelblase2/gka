@@ -27,6 +27,7 @@ public class GraphGUI
 	private JButton m_setEndButton;
 	private JButton m_searchButton;
 	private JLabel m_graphAccessesLabel;
+	private JLabel m_timeLabel;
 
 	private String m_start;
 	private String m_end;
@@ -103,7 +104,10 @@ public class GraphGUI
 			edge.setCurrentFlow(0);
 		}
 
+		double startTime = System.currentTimeMillis();
 		Path pathResult = this.m_searchAlgorithm.search(this.m_currentGraph, this.m_start, this.m_end);
+		double endTime = System.currentTimeMillis();
+		this.m_timeLabel.setText((endTime - startTime) + " ms");
 		this.m_graphComponent.getGraph().refresh();
 		this.m_graphComponent.refresh();
 		if(!pathResult.hasMore())
@@ -257,12 +261,12 @@ public class GraphGUI
 		m_graphComponent.setVerticalScrollBarPolicy(22);
 		panel1.add(m_graphComponent, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
 		final JPanel panel2 = new JPanel();
-		panel2.setLayout(new GridLayoutManager(7, 2, new Insets(0, 0, 0, 0), -1, -1));
+		panel2.setLayout(new GridLayoutManager(8, 2, new Insets(0, 0, 0, 0), -1, -1));
 		m_panel1.add(panel2, new GridConstraints(0, 1, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		m_searchSelection = new JComboBox();
 		panel2.add(m_searchSelection, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 		final Spacer spacer1 = new Spacer();
-		panel2.add(spacer1, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+		panel2.add(spacer1, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
 		m_setStartButton = new JButton();
 		m_setStartButton.setText("Set start");
 		panel2.add(m_setStartButton, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -281,6 +285,12 @@ public class GraphGUI
 		m_graphAccessesLabel = new JLabel();
 		m_graphAccessesLabel.setText("");
 		panel2.add(m_graphAccessesLabel, new GridConstraints(5, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		final JLabel label3 = new JLabel();
+		label3.setText("Time:");
+		panel2.add(label3, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		m_timeLabel = new JLabel();
+		m_timeLabel.setText("- ms");
+		panel2.add(m_timeLabel, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 	}
 
 	/**
