@@ -50,16 +50,27 @@ public class GraphGeneratorTest
 	public void testGenerateMetric()
 	{
 		GraphGenerator.GeneratorProperties properties = new GraphGenerator.GeneratorProperties(MIN_EDGES, MAX_EDGES, MIN_VERTEXES, MAX_VERTEXES, DIRECTED, MIN_WEIGHT, MAX_WEIGHT);
+		properties.metric = true;
+		properties.complete = true;
 		Graph<String, WeightedNamedEdge> generated = GraphGenerator.generate(properties);
 
 		Assert.assertTrue("Not right vertex size: " + generated.vertexSet().size() + " min: " + MIN_VERTEXES + " max: " + MAX_VERTEXES, generated.vertexSet().size() <= properties.maxVertexes && generated.vertexSet().size() >= properties.minVertexes);
-		Assert.assertTrue("Not right edge size: " + generated.edgeSet().size() + " min: " + MIN_EDGES + " max: " + MAX_EDGES, generated.edgeSet().size() <= properties.maxEdges && generated.edgeSet().size() >= properties.minEdges);
 		Assert.assertTrue(generated instanceof DirectedGraph);
+		for(String vertex : generated.vertexSet())
+		{
+			Assert.assertTrue(generated.edgesOf(vertex).size() == generated.vertexSet().size() - 1);
+		}
+
 		for(WeightedNamedEdge edge : generated.edgeSet())
 		{
 			Assert.assertTrue(edge.hasWeigth());
 			Assert.assertTrue("Not right weight: " + edge.getWeigth() + " min: " + MIN_WEIGHT + " max: " + MAX_WEIGHT, edge.getWeigth() >= properties.minWeight && edge.getWeigth() <= properties.maxWeight);
 		}
+
+		NearestNeighborSearch nearestNeighborSearch = new NearestNeighborSearch();
+		Path path = nearestNeighborSearch.search(generated, null, null);
+		Assert.assertTrue(path.hasMore());
+		Assert.assertTrue(path.next().size() == generated.vertexSet().size() + 1);
 	}
 
 	@Test
