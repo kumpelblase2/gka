@@ -10,7 +10,7 @@ import org.jgrapht.graph.DefaultDirectedGraph;
 
 public class GraphParser
 {
-	public static final Pattern REGEX = Pattern.compile("^([a-zA-Z0-9]+) ?(-(>|-) ?([a-zA-Z0-9]+) ?(\\(([a-zA-Z0-9]+)\\))?)? ?( ?: ?([0-9]+))?;$");
+	public static final Pattern REGEX = Pattern.compile("^([a-zA-Z0-9äöüÄÖÜß]+) ?(-(>|-) ?([a-zA-Z0-9äöüÄÖÜß]+) ?(\\(([a-zA-Z0-9äöüÄÖÜß]+)\\))?)? ?( ?: ?([0-9]+))?;$");
 
 	public static Graph<String, WeightedNamedEdge> parse(File inFile)
 	{
