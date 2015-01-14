@@ -20,6 +20,8 @@ public class GraphGenerator
 
 		if(inProperties.network)
 			generateNetwork(gen, inProperties);
+		else if(inProperties.complete)
+			generateComplete(gen, inProperties);
 		else
 			generateNormal(gen, inProperties);
 
@@ -38,10 +40,7 @@ public class GraphGenerator
 
 		if(vertexCount > 0)
 		{
-			int skips = SKIPS;
-
-			generateEdge:
-			for(int i = 0; i <= edgeCount || inGen.edgeSet().size() < inProperties.minEdges && skips > 0; i++)
+			for(int i = 0; i <= edgeCount || inGen.edgeSet().size() < inProperties.minEdges; i++)
 			{
 				String source = "v" + (r.nextInt(vertexCount) + 1);
 				String target = "v" + (r.nextInt(vertexCount) + 1);
@@ -49,34 +48,70 @@ public class GraphGenerator
 				if(inProperties.weighted)
 				{
 					int weight = random(r, inProperties.minWeight, inProperties.maxWeight);
-					if(inProperties.metric)
-					{
-						for(WeightedNamedEdge secondary : inGen.edgesOf(source))
-						{
-							WeightedNamedEdge tertier = inGen.getEdge(secondary.getTarget(), target);
-							if(tertier != null)
-							{
-								System.out.println((tertier.getWeigth() + secondary.getWeigth()) + " VS " + weight);
-								int tries = RETRIES;
-								while(tertier.getWeigth() + secondary.getWeigth() < weight && tries > 0)
-								{
-									System.out.println("Had to readjust: " + source + ":" + target + "; previous: " + weight);
-									weight -= random(r, inProperties.minWeight - weight, inProperties.maxWeight - weight);
-									tries--;
-								}
-
-								if(tries == 0 && tertier.getWeigth() + secondary.getWeigth() < weight)
-								{
-									skips--;
-									continue generateEdge;
-								}
-							}
-						}
-					}
 					edge.setWeigth(weight);
 				}
 
 				inGen.addEdge(source, target, edge);
+			}
+		}
+	}
+
+	private static void generateComplete(Graph<String, WeightedNamedEdge> inGen, GeneratorProperties inProperties)
+	{
+		Random r = new Random();
+		int vertexCount = random(r, inProperties.minVertexes, inProperties.maxVertexes);
+		for(int i = 1; i <= vertexCount; i++)
+		{
+			inGen.addVertex("v" + i);
+		}
+
+		if(vertexCount > 0)
+		{
+			int skips = SKIPS;
+
+			generateEdge:
+			for(int i = 1; i <= vertexCount && skips > 0; i++)
+			{
+				String source = "v" + i;
+				for(int i2 = i + 1; i2 <= vertexCount; i2++)
+				{
+					if(i == i2)
+						continue;
+
+					String target = "v" + i2;
+					WeightedNamedEdge edge = new WeightedNamedEdge(source, target, inProperties.directed);
+					if(inProperties.weighted)
+					{
+						int weight = random(r, inProperties.minWeight, inProperties.maxWeight);
+						if(inProperties.metric)
+						{
+							for(WeightedNamedEdge secondary : inGen.edgesOf(source))
+							{
+								WeightedNamedEdge tertier = inGen.getEdge(secondary.getTarget(), target);
+								if(tertier != null)
+								{
+									System.out.println((tertier.getWeigth() + secondary.getWeigth()) + " VS " + weight);
+									int tries = RETRIES;
+									while(tertier.getWeigth() + secondary.getWeigth() < weight && tries > 0)
+									{
+										System.out.println("Had to readjust: " + source + ":" + target + "; previous: " + weight);
+										weight -= random(r, inProperties.minWeight - weight, inProperties.maxWeight - weight);
+										tries--;
+									}
+
+									if(tries == 0 && tertier.getWeigth() + secondary.getWeigth() < weight)
+									{
+										skips--;
+										continue generateEdge;
+									}
+								}
+							}
+						}
+						edge.setWeigth(weight);
+					}
+
+					inGen.addEdge(source, target, edge);
+				}
 			}
 
 			if(skips == 0)
@@ -180,6 +215,7 @@ public class GraphGenerator
 		public int maxWeight;
 		public boolean network = false;
 		public boolean metric = false;
+		public boolean complete = false;
 
 		public GeneratorProperties(final int inMinEdges, final int inMaxEdges, final int inMinVertexes, final int inMaxVertexes, final boolean inDirected)
 		{
