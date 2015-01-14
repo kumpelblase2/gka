@@ -1,10 +1,10 @@
 package aufgabe1.new_gui;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.util.List;
+import javax.swing.*;
 import aufgabe1.*;
 import aufgabe1.gui.GKAFileFilter;
 import com.intellij.uiDesigner.core.*;
@@ -80,6 +80,7 @@ public class GraphGUI
 		this.m_searchSelection.addItem(new FordFulkerson());
 		this.m_searchSelection.addItem(new EdmondsKarp());
 		this.m_searchSelection.addItem(new NearestNeighborSearch());
+		this.m_searchSelection.addItem(new MST_Heuristik());
 
 		this.m_searchSelection.addItemListener(new ItemListener()
 		{
