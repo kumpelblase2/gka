@@ -6,8 +6,8 @@ import org.jgrapht.Graph;
 
 public class NearestNeighborSearch implements SearchAlgorithm
 {
-	@Override
-	public Path search(Graph<String, WeightedNamedEdge> inGraph, String inStart, String inEnd)
+	//@Override
+	public Path search1(Graph<String, WeightedNamedEdge> inGraph, String inStart, String inEnd)
 	{
 		Path path = new Path();
 		if(inStart == null)
@@ -69,7 +69,7 @@ public class NearestNeighborSearch implements SearchAlgorithm
 		return path;
 	}
 
-	public Path search2(Graph<String ,WeightedNamedEdge> inGraph, String inStart, String inEnd)
+	public Path search(Graph<String ,WeightedNamedEdge> inGraph, String inStart, String inEnd)
 	{
 		Path path = new Path();
 		if(inStart == null)
@@ -95,7 +95,7 @@ public class NearestNeighborSearch implements SearchAlgorithm
 
 			int min = Integer.MAX_VALUE;
 			int index = -1;
-			for(int i = 1; i < currentPath.size() - 1; i++)
+			for(int i = 1; i < currentPath.size(); i++)
 			{
 				currentPath.add(i, vertex);
 				int length = getDistance(inGraph, currentPath);
@@ -126,10 +126,17 @@ public class NearestNeighborSearch implements SearchAlgorithm
 		{
 			current = inDistance.get(i);
 			next = inDistance.get(i + 1);
-			length += inGraph.getEdge(current, next).getWeigth();
+			WeightedNamedEdge edge = inGraph.getEdge(current, next);
+			if(edge == null)
+				edge = inGraph.getEdge(next, current);
+
+			length += edge.getWeigth();
 		}
 
-		return length + inGraph.getEdge(next, inDistance.get(0)).getWeigth();
+		WeightedNamedEdge edge = inGraph.getEdge(current, inDistance.get(0));
+		if(edge == null)
+			edge = inGraph.getEdge(inDistance.get(0), current);
+		return length + edge.getWeigth();
 	}
 
 	@Override
