@@ -91,7 +91,7 @@ public class MST_HeuristikTest {
 	
 	//method for creating "Euler-Kreis with weights" as a graph
 	private Graph<String, WeightedNamedEdge> createEulerCircleWithWeight(List<String> inList){
-		System.out.println("inList: "+inList);
+		//System.out.println("inList: "+inList);
 		Graph<String, WeightedNamedEdge> eulerCircleWithWeights = new DefaultGraph();
 		for(int i = 0; i < inList.size()-1; i++){
 			//add Vertices
@@ -101,14 +101,14 @@ public class MST_HeuristikTest {
 			WeightedNamedEdge edge = new WeightedNamedEdge(inList.get(i), inList.get(i+1), true);
 			edge.setWeigth( testGraph.getEdge(inList.get(i), inList.get(i+1)).getWeigth());
 			eulerCircleWithWeights.addEdge(inList.get(i), inList.get(i+1), edge);
-			System.out.println("JUNIT - Added: "+edge.toString2());
+			//System.out.println("JUNIT - Added: "+edge.toString2());
 		}
 		return eulerCircleWithWeights;
 	}
 
 	@Test
 	public void test() {
-		assertTrue(weightAll < (3*37)); //Algorithm works better than factor 3
+		assertTrue(weightAll <= (2*37)); //Algorithm works better or equal to factor 2 (double of MST)
 	}
 
 }

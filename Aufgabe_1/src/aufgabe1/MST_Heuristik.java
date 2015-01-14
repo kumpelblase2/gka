@@ -99,7 +99,12 @@ public class MST_Heuristik implements SearchAlgorithm{
 			
 		}
 		
-		//System.out.println("Anzahl der Kanten: "+graphEuler.edgeSet().size());
+		/*
+		System.out.println("Anzahl der Kanten: "+graphEuler.edgeSet().size());
+		for(WeightedNamedEdge edge : graphEuler.edgeSet()){
+			System.out.println(edge.toString2());
+		}
+		*/
 		
 		ShowMST mst = new ShowMST(graphEuler); 
 		
@@ -115,21 +120,23 @@ public class MST_Heuristik implements SearchAlgorithm{
 		List<String> eulerKreis = new ArrayList<>();
 		boolean unmarkedVertexWasFound;
 		
-		//chose one vertex of the Euler-graph to be the Start and End of the Circle
+		//add all vertices to the ArrayList
 		for(String vertex : graphEuler.vertexSet()){
 			verticesOfeulerKreis.add(vertex);	
 		}
 		
-		System.out.println(verticesOfeulerKreis);
+		System.out.println("Vertices Of Eulerkreis: "+verticesOfeulerKreis);
+		
+		//chose one vertex of the Euler-graph to be the Start and End of the Circle
+		
 		//THE TOTAL WEIGHT DEPENDS ON THE FIRST CHOSEN VERTEX!!! (Weight-in-total:)
-		theStartEndVertex = verticesOfeulerKreis.get(0);   //87 -> "c" was chosen first in JUnit Test Graph
-		//theStartEndVertex = verticesOfeulerKreis.get(1);   //68
-		//theStartEndVertex = verticesOfeulerKreis.get(2);   //66
-		//theStartEndVertex = verticesOfeulerKreis.get(3);   //67
-		//theStartEndVertex = verticesOfeulerKreis.get(4);   //77
+		theStartEndVertex = verticesOfeulerKreis.get(0);   //55 -> "c" was chosen first in JUnit Test Graph
+		//theStartEndVertex = verticesOfeulerKreis.get(1);   //71 -> "e"
+		//theStartEndVertex = verticesOfeulerKreis.get(2);   //66 -> "b"
+		//theStartEndVertex = verticesOfeulerKreis.get(3);   //67 -> "d"
+		//theStartEndVertex = verticesOfeulerKreis.get(4);   //71 -> "f"
 		//theStartEndVertex = verticesOfeulerKreis.get(5);   //55 -> "a" was chosen first in JUnit Test Graph
 		
-
 		//push Start/End-vertex to the Stack
 		stackOfVertices.push(theStartEndVertex);
 
@@ -142,7 +149,7 @@ public class MST_Heuristik implements SearchAlgorithm{
 		
 			//look what is on top of the stack, take it for "theChosenOne"
 			theChosenOne = stackOfVertices.peek();
-			//System.out.println("I took: "+theChosenOne);
+			System.out.println("On the top of the stack is: "+theChosenOne);
 			
 			//set unmarkedVertexWasFound to false
 			unmarkedVertexWasFound = false;
@@ -152,19 +159,23 @@ public class MST_Heuristik implements SearchAlgorithm{
 				for(WeightedNamedEdge edge : graphEuler.edgesOf(theChosenOne)){
 					//the found target vertex was not marked yet
 					if((!eulerKreis.contains(edge.getTarget())) && (edge.getTarget() != theChosenOne)){
-						//System.out.println("found new unmarked vertex: "+edge.getTarget());
+						System.out.println("found new unmarked vertex: "+edge.getTarget());
+						System.out.println("Put "+edge.getTarget()+" on the stack");
 						eulerKreis.add(edge.getTarget());
-						stackOfVertices.add(edge.getTarget());
+						stackOfVertices.add(edge.getTarget()); //will be the next "theChosenOne"
 						unmarkedVertexWasFound = true;
+						break; //stop looking
 					}
 				}
+				
 				if(unmarkedVertexWasFound == false){
 				//no unmarked target vertex was found:
 				//remove theChosenOne from stack
 				String toBeRemoved = stackOfVertices.pop();
-				//System.out.println("found NO unmarked, removing: "+ toBeRemoved);
+				System.out.println("found NO unmarked, removing: "+ toBeRemoved);
 				unmarkedVertexWasFound = true;
 				}
+				
 			}
 			//WHILE2 END
 			
