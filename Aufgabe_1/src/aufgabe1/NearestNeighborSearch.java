@@ -19,7 +19,7 @@ public class NearestNeighborSearch implements SearchAlgorithm
 			inStart = it.next();
 		}
 
-		if(!inGraph.containsVertex(inStart) || !inGraph.containsVertex(inEnd))
+		if(!inGraph.containsVertex(inStart))
 			return path;
 
 
@@ -28,6 +28,7 @@ public class NearestNeighborSearch implements SearchAlgorithm
 		while(visited.size() < inGraph.vertexSet().size())
 		{
 			WeightedNamedEdge shortest = null;
+			path.setSteps(path.getSteps() + 1);
 			for(WeightedNamedEdge edge : inGraph.edgesOf(current))
 			{
 				String target = edge.getTarget();
@@ -40,7 +41,10 @@ public class NearestNeighborSearch implements SearchAlgorithm
 				}
 
 				if(shortest == null || (edge.getWeigth() < shortest.getWeigth() && !visited.contains(target)))
-					shortest = edge;
+				{
+					if(!visited.contains(target))
+						shortest = edge;
+				}
 			}
 
 			if(shortest == null)
@@ -53,9 +57,21 @@ public class NearestNeighborSearch implements SearchAlgorithm
 
 			visited.add(current);
 		}
-		visited.add(inStart);
+
+		path.setSteps(path.getSteps() + 1);
+		WeightedNamedEdge endStart = inGraph.getEdge(current, visited.get(0));
+		if(endStart == null || (endStart.isDirected() && endStart.getTarget().equals(current)))
+			return path;
+
+		visited.add(visited.get(0));
 
 		path.addAlternative(visited);
 		return path;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Nearest Neighbor";
 	}
 }
